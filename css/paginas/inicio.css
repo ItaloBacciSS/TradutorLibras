@@ -3,6 +3,61 @@
    Estilos exclusivos da página inicial (html/index.html).
    ========================================================== */
 
+/* ---------- Selo da turma (acima do título) ---------- */
+.topo__titulo .selo-turma {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: none;
+  margin: 0 auto 18px;
+  padding: 10px 26px 10px 18px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--raio-pilula);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 24px rgba(11, 26, 58, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: clamp(1.05rem, 3.6vw, 1.45rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 1;
+  backdrop-filter: blur(4px);
+}
+
+.selo-turma__separador {
+  color: var(--limao);
+}
+
+.selo-turma__diamante {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  fill: var(--limao-claro);
+  stroke: #fff;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(211, 242, 97, 0.8));
+  animation: brilhar 2.6s ease-in-out infinite;
+}
+
+@keyframes brilhar {
+  0%, 100% { transform: rotate(-8deg) scale(1); }
+  50% { transform: rotate(8deg) scale(1.12); }
+}
+
+@media (max-width: 560px) {
+  .topo__titulo .selo-turma {
+    gap: 8px;
+    padding: 8px 18px 8px 12px;
+    letter-spacing: 0.06em;
+  }
+
+  .selo-turma__diamante {
+    width: 26px;
+    height: 26px;
+  }
+}
+
 /* ---------- Cartões dos dois caminhos ---------- */
 .caminhos {
   display: grid;
