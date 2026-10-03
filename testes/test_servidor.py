@@ -81,7 +81,7 @@ def test_resolver_caminho(pedido, esperado):
 def test_vercel_json_do_projeto_e_valido():
     rotas = servidor.carregar_rotas()
     assert rotas["/"] == "/html/index.html"
-    assert set(rotas) == {"/", "/portugues-libras", "/libras-portugues"}
+    assert set(rotas) == {"/", "/portugues-libras", "/libras-portugues", "/aprender"}
 
 
 def test_vercel_json_faltando(tmp_path):
@@ -138,3 +138,18 @@ def test_nao_sai_da_pasta_do_projeto(servidor_local):
     with pytest.raises(urllib.error.HTTPError) as erro:
         urllib.request.urlopen(servidor_local + "/../../etc/passwd")
     assert erro.value.code == 404
+
+
+def test_dois_servidores_nao_misturam_rotas(servidor_local):
+    """Criar outro servidor (mesmo que falhe) não pode mudar as rotas do que já está ligado."""
+    ocupante = socket.socket()
+    ocupante.bind(("localhost", 0))
+    ocupante.listen()
+    try:
+        with pytest.raises(servidor.ErroDePorta):
+            servidor.criar_servidor(ocupante.getsockname()[1], {"/": "/html/index.html"})
+    finally:
+        ocupante.close()
+
+    with urllib.request.urlopen(servidor_local + "/aprender") as resposta:
+        assert resposta.status == 200

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprender Libras | Tradutor de Libras</title>
+  <meta name="description" content="Aprenda Libras com lições curtas: veja o avatar fazer os sinais e pratique com exercícios.">
+
+  <!-- Estilos: comuns a todas as páginas -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/componentes.css">
+  <!-- Estilos: só desta página -->
+  <link rel="stylesheet" href="/css/paginas/aprender.css">
+</head>
+<body data-tela="trilha">
+  <!-- Botões e links com "vlibras-links" funcionam normalmente mesmo com o avatar aberto -->
+  <a class="pular vlibras-links" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- ===================== TOPO ===================== -->
+  <header class="topo">
+    <div class="container navegacao">
+      <a class="marca vlibras-links" href="/">
+        <span class="marca__icone" aria-hidden="true">L</span>
+        Tradutor de Libras
+      </a>
+      <nav class="menu" aria-label="Menu principal">
+        <a class="vlibras-links" href="/">Início</a>
+        <a class="vlibras-links" href="/portugues-libras"><span class="menu__longo">Português → Libras</span><span class="menu__curto">PT → Libras</span></a>
+        <a class="vlibras-links" href="/libras-portugues"><span class="menu__longo">Libras → Português</span><span class="menu__curto">Libras → PT</span></a>
+        <a class="vlibras-links" href="/aprender" aria-current="page">Aprender</a>
+      </nav>
+    </div>
+
+    <div class="container topo__titulo">
+      <h1>Aprender Libras</h1>
+      <p>Lições curtas para aprender sinais do dia a dia.</p>
+
+      <!-- Placar: preenchido por js/paginas/aprender.js -->
+      <ul class="placar" aria-label="Seu progresso">
+        <li class="placar__item">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/></svg>
+          <strong id="placar-xp">0</strong> pontos
+        </li>
+        <li class="placar__item">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 1-3s0 2 2 3c0-4 1-6 1-9z"/><path d="M12 22a7 7 0 0 0 7-7c0-2-1-4-2-5"/><path d="M12 22a7 7 0 0 1-7-7c0-2 1-4 2-5"/></svg>
+          <strong id="placar-sequencia">0</strong> dias seguidos
+        </li>
+        <li class="placar__item">
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <strong id="placar-licoes">0/0</strong> lições
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ===================== CONTEÚDO ===================== -->
+  <main id="conteudo">
+    <div class="container pagina-aprender">
+
+      <!-- ========== TELA 1: TRILHA ========== -->
+      <section id="tela-trilha" class="cartao tela" aria-labelledby="titulo-trilha">
+        <h2 id="titulo-trilha" class="sr-only">Trilha de lições</h2>
+        <p id="aviso-trilha" class="aviso" hidden></p>
+        <!-- Lições desenhadas por js/modulos/trilha.js -->
+        <ol id="trilha" class="trilha"></ol>
+        <div class="trilha__rodape">
+          <button type="button" id="btn-apagar-progresso" class="botao-link vlibras-links">Recomeçar do zero</button>
+        </div>
+      </section>
+
+      <!-- ========== TELA 2: ABRINDO O AVATAR ========== -->
+      <section id="tela-carregando" class="cartao tela tela-carregando" data-estado="carregando" aria-live="polite" hidden>
+        <span class="spinner" aria-hidden="true"></span>
+        <p id="carregando-texto" class="tela-carregando__texto">Abrindo o avatar…</p>
+        <div id="carregando-acoes" class="botoes-centro" hidden>
+          <button type="button" id="btn-tentar-abrir" class="botao vlibras-links">Tentar de novo</button>
+          <button type="button" id="btn-voltar-trilha" class="botao botao--secundario vlibras-links">Voltar</button>
+        </div>
+      </section>
+
+      <!-- ========== TELA 3: LIÇÃO (desenhada por js/modulos/licao.js) ========== -->
+      <section id="tela-licao" class="cartao tela" aria-label="Lição" hidden></section>
+
+      <!-- ========== TELA 4: RESULTADO ========== -->
+      <section id="tela-resultado" class="cartao tela resultado" aria-labelledby="resultado-titulo" hidden>
+        <div id="resultado-estrelas" class="resultado__estrelas" role="img"></div>
+        <h2 id="resultado-titulo">Lição concluída!</h2>
+        <p id="resultado-licao" class="resultado__licao"></p>
+
+        <dl class="resultado__numeros">
+          <div class="resultado__numero">
+            <dt>Acertos de primeira</dt>
+            <dd id="resultado-acertos">0%</dd>
+          </div>
+          <div class="resultado__numero">
+            <dt>Pontos</dt>
+            <dd id="resultado-xp">+0</dd>
+          </div>
+          <div class="resultado__numero">
+            <dt>Dias seguidos</dt>
+            <dd id="resultado-sequencia">0</dd>
+          </div>
+        </dl>
+
+        <div class="botoes-centro">
+          <button type="button" id="btn-resultado-trilha" class="botao vlibras-links">Continuar</button>
+          <button type="button" id="btn-resultado-repetir" class="botao botao--secundario vlibras-links">Repetir lição</button>
+        </div>
+      </section>
+
+      <!--
+        Elemento escondido: o script coloca aqui a palavra/frase e simula
+        um clique para o VLibras sinalizar. Fica invisível e oculto para
+        leitores de tela, para não "entregar" a resposta dos exercícios.
+      -->
+      <p id="alvo-libras" class="alvo-oculto" aria-hidden="true"></p>
+    </div>
+  </main>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="rodape">
+    <div class="container">
+      <p>Sinais feitos pelo avatar do <a class="vlibras-links" href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras" target="_blank" rel="noopener">VLibras</a>. Seu progresso fica salvo neste navegador.</p>
+    </div>
+  </footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <!-- 1. Widget oficial do VLibras (avatar 3D) -->
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <!-- 2. Lógica desta página (importa os módulos de js/modulos/ e js/dados/) -->
+  <script type="module" src="/js/paginas/aprender.js"></script>
+</body>
+</html>

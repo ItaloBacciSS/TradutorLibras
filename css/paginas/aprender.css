@@ -1,0 +1,606 @@
+/* ==========================================================
+   paginas/aprender.css
+   Estilos exclusivos da página "Aprender Libras"
+   (html/aprender.html): placar, trilha, lição e resultado.
+   ========================================================== */
+
+.pagina-aprender {
+  max-width: 720px;
+}
+
+/* Durante a lição, esconde o título do topo para dar foco */
+body[data-tela="licao"] .topo__titulo,
+body[data-tela="carregando"] .topo__titulo {
+  display: none;
+}
+
+body[data-tela="licao"] .topo,
+body[data-tela="carregando"] .topo {
+  padding-bottom: 88px;
+}
+
+/* ==========================================================
+   1. Placar (pontos, dias seguidos, lições)
+   ========================================================== */
+.placar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.placar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--raio-pilula);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.placar__item strong {
+  font-weight: 900;
+}
+
+.placar__item .icone {
+  width: 20px;
+  height: 20px;
+}
+
+/* ==========================================================
+   2. Trilha de lições (zigue-zague)
+   ========================================================== */
+.aviso {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: var(--raio-medio);
+  background: #fff1f0;
+  color: #a8071a;
+  font-weight: 700;
+}
+
+.trilha {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trilha__item {
+  display: flex;
+  justify-content: center;
+}
+
+/* Zigue-zague: desloca os itens para os lados */
+.trilha__item:nth-child(4n + 2) { transform: translateX(-70px); }
+.trilha__item:nth-child(4n + 4) { transform: translateX(70px); }
+
+.no-licao {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "circulo titulo"
+    "circulo descricao"
+    "circulo extra";
+  column-gap: 14px;
+  align-items: center;
+  width: min(340px, 100%);
+  padding: 10px 18px 10px 10px;
+  border: 3px solid var(--borda);
+  border-radius: var(--raio);
+  background: #fff;
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--transicao), border-color var(--transicao), box-shadow var(--transicao);
+}
+
+.no-licao:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--azul);
+  box-shadow: var(--sombra);
+}
+
+.no-licao__circulo {
+  grid-area: circulo;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gradiente);
+  color: #fff;
+  box-shadow: 0 5px 0 var(--azul-escuro);
+}
+
+.no-licao__circulo .icone {
+  width: 28px;
+  height: 28px;
+}
+
+.no-licao__titulo {
+  grid-area: titulo;
+  font-size: 1.15rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.no-licao__descricao {
+  grid-area: descricao;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.no-licao .estrelas,
+.no-licao__comecar {
+  grid-area: extra;
+}
+
+.no-licao__comecar {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 2px 12px;
+  border-radius: var(--raio-pilula);
+  background: var(--limao);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* Estados */
+.no-licao[data-estado="concluida"] .no-licao__circulo {
+  background: var(--limao);
+  color: var(--texto);
+  box-shadow: 0 5px 0 #7cb305;
+}
+
+.no-licao[data-atual="true"] {
+  border-color: var(--limao);
+  box-shadow: 0 0 0 5px rgba(160, 217, 17, 0.25);
+}
+
+.no-licao[data-atual="true"] .no-licao__circulo {
+  animation: pulsar-azul 1.6s infinite;
+}
+
+.no-licao:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.no-licao:disabled .no-licao__circulo {
+  background: #d6dbe5;
+  color: #7a869a;
+  box-shadow: 0 5px 0 #b8c0cf;
+}
+
+.trilha__rodape {
+  margin-top: 24px;
+  text-align: center;
+}
+
+@keyframes pulsar-azul {
+  0% { box-shadow: 0 5px 0 var(--azul-escuro), 0 0 0 0 rgba(47, 84, 235, 0.45); }
+  70% { box-shadow: 0 5px 0 var(--azul-escuro), 0 0 0 14px rgba(47, 84, 235, 0); }
+  100% { box-shadow: 0 5px 0 var(--azul-escuro), 0 0 0 0 rgba(47, 84, 235, 0); }
+}
+
+/* Estrelas */
+.estrelas {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.estrela {
+  color: #d6dbe5;
+}
+
+.estrela--cheia {
+  color: #fadb14;
+  text-shadow: 0 1px 0 #d4b106;
+}
+
+.estrelas--grandes {
+  gap: 8px;
+  font-size: 3.4rem;
+}
+
+@media (max-width: 560px) {
+  .trilha__item:nth-child(4n + 2) { transform: translateX(-24px); }
+  .trilha__item:nth-child(4n + 4) { transform: translateX(24px); }
+}
+
+/* ==========================================================
+   3. Abrindo o avatar
+   ========================================================== */
+.tela-carregando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.tela-carregando .spinner {
+  width: 48px;
+  height: 48px;
+  border-width: 6px;
+}
+
+.tela-carregando[data-estado="erro"] .spinner {
+  display: none;
+}
+
+.tela-carregando[data-estado="erro"] .tela-carregando__texto {
+  color: #a8071a;
+}
+
+.tela-carregando__texto {
+  margin: 0;
+  font-weight: 700;
+}
+
+.botoes-centro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* ==========================================================
+   4. Lição
+   ========================================================== */
+.licao {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.licao__topo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.barra-progresso {
+  flex: 1;
+  height: 16px;
+  border-radius: var(--raio-pilula);
+  background: var(--fundo);
+  overflow: hidden;
+}
+
+.barra-progresso__cheia {
+  width: 0;
+  height: 100%;
+  border-radius: var(--raio-pilula);
+  background: var(--limao);
+  transition: width 0.35s ease;
+}
+
+.licao__conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-height: 260px;
+  text-align: center;
+  animation: aparecer 0.25s ease;
+}
+
+.licao__etiqueta {
+  padding: 4px 12px;
+  border-radius: var(--raio-pilula);
+  background: #e6f4ff;
+  color: var(--azul-escuro);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.licao__palavra {
+  margin: 4px 0;
+  font-size: clamp(2.2rem, 8vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.licao__pergunta {
+  font-size: 1.6rem;
+}
+
+.licao__destaque {
+  color: var(--azul);
+}
+
+.licao__instrucao {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+.licao__rever {
+  margin: 4px 0 8px;
+}
+
+.licao__aviso {
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: var(--raio-medio);
+  background: #fff1f0;
+  color: #a8071a;
+  font-weight: 700;
+}
+
+/* --- Opções (Que sinal é esse? / Qual é o sinal?) --- */
+.opcoes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.opcoes--sinais {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 12px 14px;
+  border: 3px solid var(--borda);
+  border-radius: var(--raio-medio);
+  background: #fff;
+  color: var(--texto);
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--borda);
+  transition: border-color var(--transicao), background var(--transicao), transform var(--transicao);
+}
+
+.opcao:hover:not(:disabled) {
+  border-color: var(--azul);
+}
+
+.opcao:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--borda);
+}
+
+.opcao[aria-pressed="true"] {
+  border-color: var(--azul);
+  background: #f0f5ff;
+  box-shadow: 0 4px 0 var(--azul);
+}
+
+.opcao[data-resultado="certo"] {
+  border-color: #52c41a;
+  background: #f6ffed;
+  box-shadow: 0 4px 0 #52c41a;
+}
+
+.opcao[data-resultado="errado"] {
+  border-color: var(--vermelho);
+  background: #fff1f0;
+  box-shadow: 0 4px 0 var(--vermelho);
+}
+
+.opcao:disabled {
+  cursor: default;
+}
+
+.opcao__numero {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: 2px solid var(--borda);
+  border-radius: 8px;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.opcao__texto {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.opcao--sinal {
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.opcao__olho {
+  color: var(--azul);
+}
+
+/* --- Monte a frase --- */
+.frase-montada,
+.banco-pecas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px;
+}
+
+.frase-montada {
+  border-bottom: 3px solid var(--borda);
+}
+
+.frase-montada[data-resultado="certo"] {
+  border-color: #52c41a;
+}
+
+.frase-montada[data-resultado="errado"] {
+  border-color: var(--vermelho);
+}
+
+.peca {
+  padding: 10px 16px;
+  border: 3px solid var(--borda);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--texto);
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--borda);
+  animation: aparecer 0.15s ease;
+}
+
+.peca:hover:not(:disabled) {
+  border-color: var(--azul);
+}
+
+.peca:disabled {
+  cursor: default;
+}
+
+/* --- Rodapé da lição (Verificar / retorno) --- */
+.licao__rodape {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 -28px -28px;
+  padding: 18px 28px 24px;
+  border-top: 2px solid var(--borda);
+  border-radius: 0 0 var(--raio) var(--raio);
+  transition: background var(--transicao);
+}
+
+.licao__rodape[data-estado="certo"] {
+  border-color: #b7eb8f;
+  background: #f6ffed;
+}
+
+.licao__rodape[data-estado="errado"] {
+  border-color: #ffccc7;
+  background: #fff1f0;
+}
+
+.licao__retorno:empty {
+  display: none;
+}
+
+.licao__retorno {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: aparecer 0.2s ease;
+}
+
+.licao__retorno-titulo {
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.licao__rodape[data-estado="certo"] .licao__retorno-titulo {
+  color: #237804;
+}
+
+.licao__rodape[data-estado="errado"] .licao__retorno-titulo,
+.licao__rodape[data-estado="errado"] .licao__retorno-texto {
+  color: #a8071a;
+}
+
+.licao__retorno-texto {
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .licao__rodape {
+    margin: 0 -20px -20px;
+    padding: 16px 20px 20px;
+  }
+
+  .opcoes--sinais {
+    grid-template-columns: 1fr;
+  }
+
+  .opcao--sinal {
+    flex-direction: row;
+  }
+}
+
+/* ==========================================================
+   5. Resultado
+   ========================================================== */
+.resultado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.resultado__estrelas .estrela--cheia {
+  animation: aparecer 0.4s ease both;
+}
+
+.resultado__estrelas .estrela:nth-child(2) { animation-delay: 0.15s; }
+.resultado__estrelas .estrela:nth-child(3) { animation-delay: 0.3s; }
+
+.resultado__licao {
+  margin: 0;
+  color: var(--texto-suave);
+  font-weight: 700;
+}
+
+.resultado__numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin: 8px 0 16px;
+}
+
+.resultado__numero {
+  padding: 12px 8px;
+  border-radius: var(--raio-medio);
+  background: var(--fundo);
+}
+
+.resultado__numero dt {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.resultado__numero dd {
+  margin: 0;
+  color: var(--azul-escuro);
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+/* ==========================================================
+   6. Elemento escondido que o VLibras lê
+   ========================================================== */
+.alvo-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

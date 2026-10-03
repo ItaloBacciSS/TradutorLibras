@@ -121,3 +121,12 @@
   color: var(--texto-suave);
   font-size: 0.95rem;
 }
+
+/* Cartão "Aprender Libras" */
+.caminho--aprender {
+  border-top-color: var(--rosa);
+}
+
+.caminho--aprender .caminho__icone {
+  background: linear-gradient(135deg, #9254de, #f759ab);
+}

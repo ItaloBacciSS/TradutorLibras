@@ -143,8 +143,9 @@ class ManipuladorComRotas(SimpleHTTPRequestHandler):
 
 def criar_servidor(porta: int, rotas: dict[str, str]) -> ThreadingHTTPServer:
     """Cria o servidor. Transforma 'porta em uso' numa mensagem clara."""
-    ManipuladorComRotas.rotas = rotas
-    manipulador = partial(ManipuladorComRotas, directory=str(PASTA_DO_PROJETO))
+    # Cada servidor ganha a sua própria cópia das rotas (um não interfere no outro)
+    manipulador_deste_servidor = type("Manipulador", (ManipuladorComRotas,), {"rotas": dict(rotas)})
+    manipulador = partial(manipulador_deste_servidor, directory=str(PASTA_DO_PROJETO))
     try:
         return ThreadingHTTPServer(("localhost", porta), manipulador)
     except OSError as erro:

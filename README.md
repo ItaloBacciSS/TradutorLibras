@@ -18,7 +18,8 @@ TradutorLibras/
 ├── html/                        Páginas
 │   ├── index.html               Página inicial (os dois caminhos + como funciona)
 │   ├── portugues-libras.html    Tradutor Português → Libras
-│   └── libras-portugues.html    Libras → Português ("em desenvolvimento")
+│   ├── libras-portugues.html    Libras → Português ("em desenvolvimento")
+│   └── aprender.html            Aprender Libras (lições estilo Duolingo)
 │
 ├── css/                         Estilos
 │   ├── base.css                 Cores (variáveis), fonte, reset, acessibilidade
@@ -27,11 +28,13 @@ TradutorLibras/
 │   └── paginas/                 Estilos exclusivos de cada página
 │       ├── inicio.css
 │       ├── portugues-libras.css
-│       └── libras-portugues.css
+│       ├── libras-portugues.css
+│       └── aprender.css
 │
 ├── js/                          JavaScript
 │   ├── dados/                   Só dados (pode editar sem mexer no código)
-│   │   └── sugestoes.js         Regras da "Dica de Libras" (gírias, expressões…)
+│   │   ├── sugestoes.js         Regras da "Dica de Libras" (gírias, expressões…)
+│   │   └── licoes.js            Lições do "Aprender Libras" (palavras e frases)
 │   ├── modulos/                 Peças reutilizáveis, uma responsabilidade cada
 │   │   ├── config.js            Configurações gerais (limites, tempos, chaves)
 │   │   ├── validacao.js         Confere e limpa o texto antes de traduzir
@@ -42,15 +45,21 @@ TradutorLibras/
 │   │   ├── abas.js              Abas acessíveis (funcionam com o teclado)
 │   │   ├── frases.js            Frases prontas para praticar
 │   │   ├── historico.js         Frases recentes (salvas no navegador)
-│   │   └── voz.js               Entrada por voz (microfone)
+│   │   ├── voz.js               Entrada por voz (microfone)
+│   │   ├── exercicios.js        Cria os exercícios de uma lição e confere respostas
+│   │   ├── progresso.js         Estrelas, pontos, dias seguidos (salvos no navegador)
+│   │   ├── trilha.js            Desenha a trilha de lições
+│   │   └── licao.js             Tela da lição (um exercício por vez)
 │   └── paginas/                 Script principal de cada página
-│       └── portugues-libras.js
+│       ├── portugues-libras.js
+│       └── aprender.js
 │
 └── testes/                      Testes automáticos (pytest + Playwright)
     ├── conftest.py              Peças comuns: servidor, navegador, VLibras falso
     ├── test_servidor.py         servidor.py: porta, rotas, vercel.json com problema
     ├── test_validacao.py        Regras do texto (vazio, só emojis, longo…)
     ├── test_sugestoes.py        Regras de sugestão, motor e cartão
+    ├── test_aprender.py         Lições, exercícios, progresso e a página Aprender
     └── test_tradutor.py         A página no navegador, com foco em exceções
 ```
 
@@ -68,6 +77,7 @@ TradutorLibras/
 | `/` | `html/index.html` |
 | `/portugues-libras` | `html/portugues-libras.html` |
 | `/libras-portugues` | `html/libras-portugues.html` |
+| `/aprender` | `html/aprender.html` |
 
 Para criar uma página nova: crie o HTML em `html/`, o CSS em `css/paginas/`,
 o JS em `js/paginas/` (se precisar) e adicione a rota no `vercel.json`.
@@ -104,7 +114,7 @@ Os testes usam um VLibras **falso**, então funcionam sem internet. Eles confere
 | Mais de 500 caracteres | Campo não aceita; contador fica vermelho |
 | HTML digitado (`<img onerror=…>`) | Mostrar como texto, nunca executar |
 | VLibras fora do ar | Erro com botão "Recarregar" |
-| Avatar não abre em 90 s | Erro com botão "Tentar de novo" |
+| Avatar não abre em 2 min | Erro com botão "Tentar de novo" |
 | Aluno fechou o avatar | Próxima tradução abre de novo |
 | Vários cliques seguidos | Traduz uma vez só |
 | Internet caiu / voltou | Avisa e volta ao normal sozinho |
@@ -140,6 +150,33 @@ Para editar:
 3. Rode `python -m pytest testes/test_sugestoes.py`. O teste `test_regras_sem_problemas`
    avisa se alguma regra ficou mal escrita (termo repetido, opção faltando…).
    O mesmo aviso aparece no console do navegador (F12).
+
+## Aprender Libras
+
+Área separada do tradutor, no estilo Duolingo:
+
+- **Trilha de lições:** a próxima abre quando a anterior é concluída.
+- **4 tipos de exercício**, criados sozinhos a partir das palavras e frases de cada lição:
+
+  | Exercício | Como funciona |
+  |---|---|
+  | Ver e aprender | Mostra a palavra nova e o avatar faz o sinal (sem nota) |
+  | Que sinal é esse? | O avatar faz o sinal; o aluno escolhe a palavra entre 4 |
+  | Qual é o sinal? | Aparece a palavra; o aluno vê 3 sinais e escolhe o certo |
+  | Monte a frase | O avatar sinaliza uma frase; o aluno monta em português |
+
+- **Nota:** conta só a primeira tentativa. Errou? O exercício volta no fim da lição.
+  3 estrelas = 90% ou mais; 2 estrelas = 70% ou mais; 1 estrela = concluiu.
+- **Pontos e dias seguidos** ficam salvos no navegador do aluno (sem login).
+- **Atalhos:** Enter = Verificar/Continuar; 1–4 = escolher opção.
+- A palavra que o avatar está sinalizando fica num elemento escondido
+  (`#alvo-libras`), para não "entregar" a resposta na tela.
+
+**Para editar as lições**, abra `js/dados/licoes.js` (o começo do arquivo explica o formato).
+Cada lição tem de 4 a 8 palavras e de 1 a 3 frases curtas, sem pontuação.
+Todas começaram com `validado: false`: confira com a comunidade surda se o avatar
+faz o sinal certo de cada palavra. Depois de editar, rode
+`python -m pytest testes/test_aprender.py` (o teste `test_licoes_sem_problemas` avisa erros).
 
 ## Como publicar no Vercel
 

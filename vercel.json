@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/", "destination": "/html/index.html" },
     { "source": "/portugues-libras", "destination": "/html/portugues-libras.html" },
-    { "source": "/libras-portugues", "destination": "/html/libras-portugues.html" }
+    { "source": "/libras-portugues", "destination": "/html/libras-portugues.html" },
+    { "source": "/aprender", "destination": "/html/aprender.html" }
   ]
 }

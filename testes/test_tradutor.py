@@ -184,13 +184,13 @@ def test_avatar_que_quebra_ao_abrir(abrir_pagina):
 
 
 def test_avatar_que_nunca_termina_de_abrir(abrir_pagina):
-    """Depois de 90 segundos esperando, mostra erro e oferece tentar de novo."""
+    """Depois de 2 minutos esperando, mostra erro e oferece tentar de novo."""
     pagina, erros = abrir_pagina(vlibras="nunca_abre", relogio_falso=True)
     digitar_e_traduzir(pagina, "Oi")
     expect(balao(pagina)).to_have_attribute("data-estado", "carregando")
     expect(pagina.locator("#btn-traduzir")).to_be_disabled()
 
-    pagina.clock.run_for(91_000)
+    pagina.clock.run_for(121_000)
 
     expect(balao(pagina)).to_have_attribute("data-estado", "erro")
     expect(mensagem(pagina)).to_contain_text("demorou demais")
