@@ -85,6 +85,34 @@
   transform: rotate(6deg) scale(1.08);
 }
 
+/* Nome do site + turma, um embaixo do outro */
+.marca__textos {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.marca__turma {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+  color: var(--limao-claro);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.marca__diamante {
+  width: 13px;
+  height: 13px;
+  fill: rgba(211, 242, 97, 0.25);
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
 .menu {
   display: flex;
   gap: 6px;

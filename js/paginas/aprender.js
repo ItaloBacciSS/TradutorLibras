@@ -13,7 +13,9 @@ import { conferirLicoes } from "../modulos/exercicios.js";
 import { iniciarLicao } from "../modulos/licao.js";
 import { desenharTrilha, estrelas } from "../modulos/trilha.js";
 import { lerProgresso, registrarLicao, apagarProgresso, sequenciaAtual } from "../modulos/progresso.js";
+import { LEGENDA_NO_APRENDER } from "../modulos/config.js";
 import {
+  definirLegenda,
   iniciarVLibras,
   vlibrasDisponivel,
   garantirWidgetAberto,
@@ -167,6 +169,9 @@ el.apagar.addEventListener("click", () => {
 // ==========================================================
 const problemas = conferirLicoes(LICOES);
 if (problemas.length) console.warn("Problemas em js/dados/licoes.js:\n- " + problemas.join("\n- "));
+
+// Sem legenda nos exercícios: senão o avatar mostra a resposta escrita
+definirLegenda(LEGENDA_NO_APRENDER);
 
 if (!vlibrasDisponivel() || !iniciarVLibras()) {
   el.aviso.hidden = false;

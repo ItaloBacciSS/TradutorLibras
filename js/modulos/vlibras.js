@@ -52,6 +52,35 @@ export function iniciarVLibras() {
   }
 }
 
+/** Onde o VLibras guarda as preferências do avatar (velocidade, legenda, personagem). */
+const CHAVE_PREFERENCIAS_VLIBRAS = "@vlibras/player";
+
+/**
+ * Liga ou desliga a legenda do avatar.
+ * Precisa ser chamada ANTES do avatar abrir pela primeira vez na página:
+ * o VLibras lê esta preferência quando carrega.
+ * Mantém as outras preferências (velocidade, personagem) como estavam.
+ * @param {boolean} ligada
+ */
+export function definirLegenda(ligada) {
+  let salvo = null;
+  try {
+    salvo = JSON.parse(localStorage.getItem(CHAVE_PREFERENCIAS_VLIBRAS) ?? "null");
+  } catch {
+    /* preferências estragadas: começa do zero */
+  }
+
+  try {
+    if (!salvo || typeof salvo !== "object" || typeof salvo.state !== "object" || salvo.state === null) {
+      salvo = { state: {}, version: 1 };
+    }
+    salvo.state.showSubtitles = Boolean(ligada);
+    localStorage.setItem(CHAVE_PREFERENCIAS_VLIBRAS, JSON.stringify(salvo));
+  } catch {
+    /* armazenamento bloqueado: o avatar usa o padrão dele (legenda ligada) */
+  }
+}
+
 /**
  * O VLibras cria este <style> quando o avatar está carregado E aberto.
  * É o sinal de que ele já está escutando os cliques.

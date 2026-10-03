@@ -171,6 +171,14 @@ Para editar:
 - **Atalhos:** Enter = Verificar/Continuar; 1–4 = escolher opção.
 - A palavra que o avatar está sinalizando fica num elemento escondido
   (`#alvo-libras`), para não "entregar" a resposta na tela.
+- **Legenda do avatar desligada** nesta página (senão ela mostra a resposta escrita).
+  No tradutor ela fica ligada. Isso é configurado em `js/modulos/config.js`
+  (`LEGENDA_NO_TRADUTOR` e `LEGENDA_NO_APRENDER`). O aluno ainda pode ligar a
+  legenda no botão do próprio avatar.
+- **Onde o progresso fica salvo:** no `localStorage` do navegador, na chave
+  `tradutor-libras:aprender`. Não tem login nem servidor: cada navegador de cada
+  computador tem o seu progresso. Em computador compartilhado, os alunos dividem o
+  mesmo progresso; limpar os dados do navegador apaga tudo.
 
 **Para editar as lições**, abra `js/dados/licoes.js` (o começo do arquivo explica o formato).
 Cada lição tem de 4 a 8 palavras e de 1 a 3 frases curtas, sem pontuação.

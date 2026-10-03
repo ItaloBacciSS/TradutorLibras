@@ -499,3 +499,31 @@ def test_menu_cabe_no_celular(navegador, servidor_local, caminho):
     )
     contexto.close()
     assert fora == []
+
+
+# ---------- Legenda do avatar ----------
+LER_LEGENDA = "JSON.parse(localStorage.getItem('@vlibras/player')).state.showSubtitles"
+
+
+def test_aprender_desliga_a_legenda(abrir_pagina):
+    pagina, _ = abrir_pagina("/aprender")
+    assert pagina.evaluate(LER_LEGENDA) is False
+
+
+def test_tradutor_liga_a_legenda(abrir_pagina):
+    pagina, _ = abrir_pagina("/portugues-libras")
+    assert pagina.evaluate(LER_LEGENDA) is True
+
+
+def test_legenda_mantem_outras_preferencias_do_avatar(abrir_pagina):
+    preferencias = '{"state":{"speed":1.5,"avatar":"hosana","showSubtitles":true},"version":1}'
+    pagina, _ = abrir_pagina("/aprender", antes_de_abrir=f"localStorage.setItem('@vlibras/player', '{preferencias}')")
+    salvo = pagina.evaluate("JSON.parse(localStorage.getItem('@vlibras/player'))")
+    assert salvo == {"state": {"speed": 1.5, "avatar": "hosana", "showSubtitles": False}, "version": 1}
+
+
+@pytest.mark.parametrize("estragado", ["{{{", "42", "null", '{"state": "x"}'])
+def test_preferencias_do_avatar_estragadas(abrir_pagina, estragado):
+    pagina, erros = abrir_pagina("/aprender", antes_de_abrir=f"localStorage.setItem('@vlibras/player', {json.dumps(estragado)})")
+    assert pagina.evaluate(LER_LEGENDA) is False
+    assert erros == []

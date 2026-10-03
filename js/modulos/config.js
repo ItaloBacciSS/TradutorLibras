@@ -9,6 +9,13 @@ export const VLIBRAS_URL = "https://vlibras.gov.br/app";
 // Lado da tela onde o avatar aparece: "R" (direita) ou "L" (esquerda)
 export const VLIBRAS_POSICAO = "R";
 
+// Legenda do avatar (o texto que aparece embaixo dele enquanto sinaliza)
+// - No tradutor fica LIGADA: ajuda a acompanhar a frase.
+// - No "Aprender" fica DESLIGADA: senão a legenda entrega a resposta dos exercícios.
+// (O aluno ainda pode ligar/desligar no botão de legenda do próprio avatar.)
+export const LEGENDA_NO_TRADUTOR = true;
+export const LEGENDA_NO_APRENDER = false;
+
 // Tempo máximo esperando o avatar carregar (2 min: com internet lenta já levou mais de 1 min)
 export const TEMPO_MAXIMO_CARREGAR_MS = 120000;
 

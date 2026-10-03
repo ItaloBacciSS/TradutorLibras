@@ -4,9 +4,10 @@
    Junta os módulos de js/modulos/ e liga os elementos da tela.
    ========================================================== */
 
-import { LIMITE_CARACTERES } from "../modulos/config.js";
+import { LIMITE_CARACTERES, LEGENDA_NO_TRADUTOR } from "../modulos/config.js";
 import { prepararTexto } from "../modulos/validacao.js";
 import {
+  definirLegenda,
   iniciarVLibras,
   vlibrasDisponivel,
   widgetPronto,
@@ -261,6 +262,9 @@ const problemasNasRegras = conferirRegras();
 if (problemasNasRegras.length) {
   console.warn("Problemas em js/dados/sugestoes.js:\n- " + problemasNasRegras.join("\n- "));
 }
+
+// No tradutor a legenda ajuda a acompanhar a frase
+definirLegenda(LEGENDA_NO_TRADUTOR);
 
 if (!vlibrasDisponivel() || !iniciarVLibras()) {
   balao.erro(MENSAGENS_VLIBRAS.naoCarregou, { rotulo: "Recarregar", acao: () => location.reload() });
