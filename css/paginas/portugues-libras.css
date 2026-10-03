@@ -1,0 +1,100 @@
+/* ==========================================================
+   paginas/portugues-libras.css
+   Estilos exclusivos do tradutor (html/portugues-libras.html).
+   ========================================================== */
+
+/* ---------- Grade de duas colunas ---------- */
+.tradutor {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .tradutor {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Linha abaixo do campo (atalho e contador) ---------- */
+.linha-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0 16px;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+/* ---------- Quadro "Sendo sinalizado agora" ---------- */
+.em-libras {
+  min-height: 64px;
+  margin-top: 4px;
+  padding: 16px;
+  border-left: 5px solid var(--azul);
+  border-radius: var(--raio-pequeno);
+  background: var(--fundo);
+  font-size: 1.25rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.em-libras--vazio {
+  color: var(--texto-suave);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* ---------- Frases para praticar ---------- */
+.grupo-frases + .grupo-frases {
+  margin-top: 16px;
+}
+
+/* ---------- Histórico ---------- */
+.cabecalho-historico {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cabecalho-historico h2 {
+  margin: 0;
+}
+
+.historico {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historico li + li {
+  border-top: 1px solid var(--borda);
+}
+
+.historico__item {
+  width: 100%;
+  padding: 10px 4px;
+  border: none;
+  background: none;
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.historico__item:hover {
+  color: var(--azul);
+}
+
+.historico__vazio {
+  padding: 10px 4px;
+  color: var(--texto-suave);
+}

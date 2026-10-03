@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Português para Libras | Tradutor de Libras</title>
+  <meta name="description" content="Digite ou fale em português e veja a tradução em Libras feita por um avatar 3D.">
+
+  <!-- Estilos: comuns a todas as páginas -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/componentes.css">
+  <!-- Estilos: só desta página -->
+  <link rel="stylesheet" href="/css/paginas/portugues-libras.css">
+</head>
+<body>
+  <!--
+    Atenção: com o avatar aberto, o VLibras traduz qualquer texto clicado.
+    A classe "vlibras-links" faz ele IGNORAR botões e links, para que
+    eles funcionem normalmente.
+  -->
+  <a class="pular vlibras-links" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- ===================== CABEÇALHO ===================== -->
+  <header class="topo">
+    <div class="container">
+      <a class="marca vlibras-links" href="/">
+        <span class="marca-icone" aria-hidden="true">L</span>
+        Tradutor de Libras
+      </a>
+      <nav class="menu" aria-label="Menu principal">
+        <a class="vlibras-links" href="/">Início</a>
+        <a class="vlibras-links" href="/portugues-libras" aria-current="page">Português → Libras</a>
+        <a class="vlibras-links" href="/libras-portugues">Libras → Português</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================== CONTEÚDO ===================== -->
+  <main id="conteudo">
+    <div class="container">
+      <h1>Português → Libras</h1>
+      <p class="subtitulo">
+        Escreva ou fale uma frase e clique em <strong>Traduzir</strong>. O avatar aparece
+        no canto da tela e faz os sinais.
+      </p>
+
+      <div class="tradutor">
+
+        <!-- ========== Coluna da esquerda: entrada ========== -->
+        <div class="coluna">
+
+          <!-- Campo de texto e botões -->
+          <section class="cartao" aria-labelledby="titulo-entrada">
+            <h2 id="titulo-entrada" class="sr-only">Texto em português</h2>
+            <label class="rotulo" for="texto">Texto em português</label>
+            <textarea id="texto" class="campo-texto" maxlength="500"
+              placeholder="Ex.: Bom dia! Qual é o seu nome?"></textarea>
+
+            <div class="linha-info">
+              <span>Atalho: Ctrl + Enter para traduzir</span>
+              <span id="contador">0/500</span>
+            </div>
+
+            <div class="botoes">
+              <button type="button" id="btn-traduzir" class="botao vlibras-links">Traduzir</button>
+              <button type="button" id="btn-falar" class="botao botao--secundario vlibras-links" hidden>Falar</button>
+              <button type="button" id="btn-repetir" class="botao botao--secundario vlibras-links" disabled>Repetir</button>
+              <button type="button" id="btn-limpar" class="botao botao--secundario vlibras-links">Limpar</button>
+            </div>
+
+            <p id="status" class="status" role="status" aria-live="polite"></p>
+          </section>
+
+          <!-- Frase que o avatar está sinalizando -->
+          <section class="cartao" aria-labelledby="titulo-traduzindo">
+            <h2 id="titulo-traduzindo">Sendo sinalizado agora</h2>
+            <!-- O script coloca o texto aqui e simula um clique para o VLibras traduzir -->
+            <div id="alvo-libras" class="em-libras em-libras--vazio">Nenhuma frase traduzida ainda.</div>
+          </section>
+        </div>
+
+        <!-- ========== Coluna da direita: apoio ========== -->
+        <div class="coluna">
+
+          <!-- Frases prontas (preenchidas por js/modulos/frases.js) -->
+          <section class="cartao" aria-labelledby="titulo-exemplos">
+            <h2 id="titulo-exemplos">Frases para praticar</h2>
+            <div id="lista-frases"></div>
+          </section>
+
+          <!-- Histórico (preenchido por js/modulos/historico.js) -->
+          <section class="cartao" aria-labelledby="titulo-historico">
+            <div class="cabecalho-historico">
+              <h2 id="titulo-historico">Últimas traduções</h2>
+              <button type="button" id="btn-apagar-historico" class="chip vlibras-links">Apagar</button>
+            </div>
+            <ul id="historico" class="historico"></ul>
+          </section>
+
+          <p class="dica">
+            Dica: no avatar você pode mudar a velocidade, trocar de personagem e
+            consultar o dicionário. Com o avatar aberto, clicar em qualquer texto
+            da página também mostra a tradução dele.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="rodape">
+    <div class="container">
+      <p>Tradução em Libras feita com o <a class="vlibras-links" href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras" target="_blank" rel="noopener">VLibras</a>, do Governo Federal.</p>
+      <p>A tradução automática pode ter erros. Confira com um intérprete ou com a comunidade surda.</p>
+    </div>
+  </footer>
+
+  <!-- ===================== SCRIPTS ===================== -->
+  <!-- 1. Widget oficial do VLibras (avatar 3D) -->
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <!-- 2. Lógica desta página (importa os módulos de js/modulos/) -->
+  <script type="module" src="/js/paginas/portugues-libras.js"></script>
+</body>
+</html>

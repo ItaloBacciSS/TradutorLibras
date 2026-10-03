@@ -1,0 +1,118 @@
+/* ==========================================================
+   base.css
+   Variáveis de cor e medida, reset e tipografia.
+   Usado por TODAS as páginas. Para mudar a identidade visual
+   do site, comece pelas variáveis em :root.
+   ========================================================== */
+
+/* ---------- Variáveis (tema claro) ---------- */
+:root {
+  --azul: #1351b4;
+  --azul-escuro: #0c326f;
+  --verde: #168821;
+  --amarelo: #ffcd07;
+  --vermelho: #c62828;
+
+  --fundo: #f5f7fb;
+  --cartao: #ffffff;
+  --texto: #1b1f29;
+  --texto-suave: #555e6f;
+  --borda: #d6dbe5;
+
+  --raio: 14px;
+  --raio-pequeno: 10px;
+  --sombra: 0 4px 18px rgba(12, 50, 111, 0.08);
+  --largura-maxima: 1080px;
+}
+
+/* ---------- Variáveis (tema escuro) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --azul: #5992ed;
+    --azul-escuro: #a9c6f5;
+    --verde: #4fbf5b;
+    --fundo: #12151c;
+    --cartao: #1c212b;
+    --texto: #eef1f6;
+    --texto-suave: #a7b0c0;
+    --borda: #2f3644;
+    --sombra: 0 4px 18px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* ---------- Reset ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--texto);
+  background: var(--fundo);
+}
+
+/* ---------- Tipografia ---------- */
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  color: var(--texto);
+}
+
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin: 0 0 12px;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+
+a {
+  color: var(--azul);
+}
+
+/* ---------- Acessibilidade ---------- */
+:focus-visible {
+  outline: 3px solid var(--amarelo);
+  outline-offset: 2px;
+}
+
+/* Esconde visualmente, mas leitores de tela continuam lendo */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Link "Pular para o conteúdo" (aparece ao navegar com Tab) */
+.pular {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--amarelo);
+  color: #000;
+}
+
+.pular:focus {
+  left: 8px;
+}

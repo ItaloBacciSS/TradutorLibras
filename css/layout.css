@@ -1,0 +1,103 @@
+/* ==========================================================
+   layout.css
+   Estrutura comum a todas as páginas:
+   container, cabeçalho (topo), área principal e rodapé.
+   ========================================================== */
+
+/* ---------- Container central ---------- */
+.container {
+  width: 100%;
+  max-width: var(--largura-maxima);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ---------- Cabeçalho ---------- */
+.topo {
+  background: var(--azul-escuro);
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .topo {
+    background: #0b1a33;
+  }
+}
+
+.topo .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 68px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.marca-icone {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--amarelo);
+  color: #0c326f;
+  font-size: 1.3rem;
+}
+
+/* ---------- Menu ---------- */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.menu a {
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.menu a[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+/* ---------- Área principal ---------- */
+main {
+  padding: 32px 0 56px;
+}
+
+.subtitulo {
+  max-width: 680px;
+  margin: 0 0 28px;
+  color: var(--texto-suave);
+  font-size: 1.1rem;
+}
+
+/* ---------- Rodapé ---------- */
+.rodape {
+  padding: 24px 0;
+  border-top: 1px solid var(--borda);
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.rodape p {
+  margin: 4px 0;
+}

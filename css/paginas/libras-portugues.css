@@ -1,0 +1,29 @@
+/* ==========================================================
+   paginas/libras-portugues.css
+   Estilos exclusivos da página "em desenvolvimento"
+   (html/libras-portugues.html).
+   ========================================================== */
+
+.em-breve {
+  max-width: 680px;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.em-breve__titulo {
+  margin-top: 12px;
+}
+
+.em-breve__texto {
+  margin: 0 auto 20px;
+}
+
+.em-breve__lista {
+  color: var(--texto-suave);
+  text-align: left;
+}
+
+.em-breve__botoes {
+  justify-content: center;
+  margin-top: 24px;
+}

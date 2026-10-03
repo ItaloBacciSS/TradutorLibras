@@ -1,0 +1,59 @@
+/* ==========================================================
+   paginas/inicio.css
+   Estilos exclusivos da página inicial (html/index.html).
+   ========================================================== */
+
+.hero {
+  padding: 24px 0 8px;
+}
+
+/* ---------- Cartões dos dois caminhos ---------- */
+.caminhos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 8px 0 40px;
+}
+
+.caminho {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.caminho:hover {
+  transform: translateY(-3px);
+  border-color: var(--azul);
+}
+
+.caminho__direcao {
+  color: var(--azul);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.caminho__descricao {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+.caminho__acao {
+  margin-top: auto;
+  color: var(--azul);
+  font-weight: 600;
+}
+
+/* ---------- Seção "Como funciona" ---------- */
+.info-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.info-grade p {
+  margin: 0;
+  color: var(--texto-suave);
+}

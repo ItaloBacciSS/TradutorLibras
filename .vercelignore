@@ -1,0 +1,4 @@
+# Arquivos que NÃO vão para o site publicado no Vercel
+servidor.py
+README.md
+__pycache__/

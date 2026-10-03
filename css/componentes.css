@@ -1,0 +1,153 @@
+/* ==========================================================
+   componentes.css
+   Peças reutilizáveis: cartão, selo, botões, chips,
+   campo de texto, mensagens de status e dica.
+   ========================================================== */
+
+/* ---------- Cartão ---------- */
+.cartao {
+  padding: 24px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--cartao);
+  box-shadow: var(--sombra);
+}
+
+/* ---------- Selo (etiqueta pequena) ---------- */
+.selo {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(22, 136, 33, 0.14);
+  color: var(--verde);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.selo--dev {
+  background: rgba(255, 205, 7, 0.25);
+  color: #7a5c00;
+}
+
+@media (prefers-color-scheme: dark) {
+  .selo--dev {
+    color: var(--amarelo);
+  }
+}
+
+/* ---------- Botões ---------- */
+.botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: 2px solid var(--azul);
+  border-radius: var(--raio-pequeno);
+  background: var(--azul);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao:hover {
+  filter: brightness(1.08);
+}
+
+.botao:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.botao--secundario {
+  background: transparent;
+  color: var(--azul);
+}
+
+.botao--gravando {
+  border-color: var(--vermelho);
+  background: var(--vermelho);
+  color: #fff;
+}
+
+/* ---------- Chips (botões pequenos arredondados) ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 6px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--azul);
+  color: var(--azul);
+}
+
+/* ---------- Campo de texto ---------- */
+.rotulo {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.campo-texto {
+  width: 100%;
+  min-height: 150px;
+  padding: 14px;
+  border: 2px solid var(--borda);
+  border-radius: var(--raio-pequeno);
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 1.1rem;
+  resize: vertical;
+}
+
+.campo-texto:focus {
+  border-color: var(--azul);
+  outline: none;
+}
+
+/* ---------- Mensagem de status ---------- */
+.status {
+  min-height: 1.6em;
+  margin-top: 14px;
+  color: var(--texto-suave);
+  font-size: 0.95rem;
+}
+
+.status--erro {
+  color: var(--vermelho);
+}
+
+.status--ok {
+  color: var(--verde);
+}
+
+/* ---------- Dica ---------- */
+.dica {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--raio-pequeno);
+  background: rgba(19, 81, 180, 0.07);
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
