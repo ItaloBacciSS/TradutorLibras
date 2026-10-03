@@ -586,3 +586,35 @@ def test_preferencias_do_avatar_estragadas(abrir_pagina, estragado):
     pagina, erros = abrir_pagina("/aprender", antes_de_abrir=f"localStorage.setItem('@vlibras/player', {json.dumps(estragado)})")
     assert pagina.evaluate(LER_LEGENDA) is False
     assert erros == []
+
+
+
+# ---------- Avatar aberto não pode atrapalhar os cliques ----------
+def test_com_avatar_aberto_da_para_comecar_outra_licao(abrir_pagina):
+    """Bug real: depois de abrir o avatar, o clique na próxima lição era "roubado" por ele."""
+    pagina, _ = abrir_aprender(abrir_pagina)
+    pagina.locator(".no-licao").first.click()
+    fazer_licao(pagina)
+    pagina.click("#btn-resultado-trilha")
+
+    # Avatar continua aberto: clicar na lição 2 tem que abrir a lição
+    assert pagina.evaluate("!!document.getElementById('@text-capture.style')")
+    pagina.locator(".no-licao").nth(1).click()
+    expect(pagina.locator("#tela-licao")).to_be_visible()
+    assert pagina.evaluate("window.__vlibras.cliquesRoubados || 0") == 0
+
+
+@pytest.mark.parametrize("caminho", ["/aprender", "/portugues-libras"])
+def test_todos_os_botoes_e_links_funcionam_com_avatar_aberto(abrir_pagina, caminho):
+    """Todo botão e link visível precisa da classe vlibras-links (senão o avatar rouba o clique)."""
+    pagina, _ = abrir_pagina(caminho)
+    if caminho == "/aprender":
+        pagina.locator(".no-licao").first.click()
+        expect(pagina.locator("#tela-licao")).to_be_visible()
+        pagina.get_by_role("button", name="Sair da lição").click()
+    sem_classe = pagina.evaluate(
+        """[...document.querySelectorAll('button, a')]
+             .filter((el) => el.offsetParent !== null && !el.classList.contains('vlibras-links'))
+             .map((el) => el.outerHTML.slice(0, 80))"""
+    )
+    assert sem_classe == []

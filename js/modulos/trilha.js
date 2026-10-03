@@ -47,6 +47,7 @@ export function desenharTrilha(lista, { licoes, progresso, aoEscolher }) {
 
     const botao = document.createElement("button");
     botao.type = "button";
+    // "vlibras-links": com o avatar aberto, o VLibras ignora este botão e o clique abre a lição
     botao.className = "no-licao";
     botao.disabled = !liberada;
     botao.dataset.estado = concluida ? "concluida" : liberada ? "liberada" : "bloqueada";

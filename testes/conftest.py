@@ -28,7 +28,10 @@ import servidor  # noqa: E402  (precisa vir depois do sys.path)
 # Imita o comportamento do widget real:
 #  - VLibrasWidget.open() "carrega" o avatar e cria o <style> de pronto;
 #  - com o avatar aberto, cliques em textos são "traduzidos";
-#  - elementos com a classe vlibras-links são ignorados.
+#  - com o avatar aberto, cliques em BOTÕES e LINKS sem a classe vlibras-links
+#    são "roubados" pelo avatar (o botão não funciona), igual ao widget real;
+#  - elementos com a classe vlibras-links são ignorados (funcionam normal).
+#    Como no widget real, a classe precisa estar no próprio elemento clicado.
 # Tudo fica registrado em window.__vlibras para os testes conferirem.
 # ==========================================================
 VLIBRAS_FALSO = """
@@ -52,8 +55,17 @@ window.VLibras = {
 document.addEventListener("DOMContentLoaded", function () {
   document.body.addEventListener("click", function (evento) {
     if (!document.getElementById("@text-capture.style")) return;
-    if (evento.target.closest(".vlibras-links")) return;
-    var texto = evento.target.textContent.trim();
+    var alvo = evento.target;
+    if (alvo.matches(".vlibras-links")) return;
+    var botaoOuLink = alvo.closest("button, a");
+    if (botaoOuLink) {
+      // O widget real "rouba" o clique e mostra um balão perguntando se quer traduzir
+      evento.preventDefault();
+      evento.stopPropagation();
+      window.__vlibras.cliquesRoubados = (window.__vlibras.cliquesRoubados || 0) + 1;
+      return;
+    }
+    var texto = alvo.textContent.trim();
     if (texto) window.__vlibras.traduzidos.push(texto);
   }, true);
 });
