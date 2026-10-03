@@ -108,7 +108,7 @@ export function iniciarLicao({ elemento, licao, todasLicoes, sinalizar, aoTermin
     if (acertou && primeiraTentativa) acertos++;
     if (!acertou && primeiraTentativa) {
       jaRepetidos.add(atual.id);
-      fila.push({ ...refazerExercicio(atual, licao, todasLicoes, aleatorio), id: atual.id });
+      fila.push({ ...refazerExercicio(atual, aleatorio), id: atual.id });
     }
 
     fase = "retorno";

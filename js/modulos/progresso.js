@@ -80,9 +80,14 @@ export function registrarLicao(idLicao, acertos, total, agora = new Date()) {
   };
 }
 
-/** A lição na posição "indice" está liberada? (a primeira sempre está) */
+/**
+ * A lição na posição "indice" está liberada?
+ * A primeira sempre está; as outras quando a anterior foi concluída
+ * (ou quando a própria lição já foi feita antes).
+ */
 export function licaoLiberada(indice, licoes, progresso) {
   if (indice === 0) return true;
+  if (progresso.licoes[licoes[indice]?.id]?.concluida) return true;
   const anterior = licoes[indice - 1];
   return Boolean(anterior && progresso.licoes[anterior.id]?.concluida);
 }

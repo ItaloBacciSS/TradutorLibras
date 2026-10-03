@@ -11,6 +11,7 @@ const ICONES = {
   cadeado: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   certo: '<polyline points="20 6 9 17 4 12"/>',
   jogar: '<polygon points="7 4 20 12 7 20 7 4"/>',
+  revisao: '<polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>',
 };
 
 /**
@@ -23,8 +24,18 @@ const ICONES = {
 export function desenharTrilha(lista, { licoes, progresso, aoEscolher }) {
   lista.innerHTML = "";
   let proximaMarcada = false;
+  let unidadeAtual = null;
 
   licoes.forEach((licao, indice) => {
+    // Título da unidade quando ela começa
+    if (licao.unidade && licao.unidade !== unidadeAtual) {
+      unidadeAtual = licao.unidade;
+      const cabecalho = document.createElement("li");
+      cabecalho.className = "trilha__unidade";
+      cabecalho.textContent = licao.unidade;
+      lista.append(cabecalho);
+    }
+
     const salvo = progresso.licoes[licao.id];
     const concluida = Boolean(salvo?.concluida);
     const liberada = licaoLiberada(indice, licoes, progresso);
@@ -39,17 +50,19 @@ export function desenharTrilha(lista, { licoes, progresso, aoEscolher }) {
     botao.className = "no-licao";
     botao.disabled = !liberada;
     botao.dataset.estado = concluida ? "concluida" : liberada ? "liberada" : "bloqueada";
+    if (licao.revisao) botao.dataset.tipo = "revisao";
     if (atual) botao.dataset.atual = "true";
     botao.setAttribute(
       "aria-label",
-      `Lição ${indice + 1}: ${licao.titulo}` +
+      `${licao.revisao ? "Revisão" : "Lição"}: ${licao.titulo}` +
         (concluida ? `, concluída com ${salvo.estrelas} de 3 estrelas` : liberada ? "" : ", bloqueada"),
     );
 
     const circulo = document.createElement("span");
     circulo.className = "no-licao__circulo";
     circulo.setAttribute("aria-hidden", "true");
-    circulo.innerHTML = svg(concluida ? ICONES.certo : liberada ? ICONES.jogar : ICONES.cadeado);
+    const iconeLiberada = licao.revisao ? ICONES.revisao : ICONES.jogar;
+    circulo.innerHTML = svg(concluida ? ICONES.certo : liberada ? iconeLiberada : ICONES.cadeado);
 
     const titulo = document.createElement("span");
     titulo.className = "no-licao__titulo";

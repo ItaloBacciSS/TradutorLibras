@@ -8,7 +8,7 @@
      resultado  → estrelas e pontos ganhos
    ========================================================== */
 
-import { LICOES } from "../dados/licoes.js";
+import { LICOES, CONECTORES } from "../dados/licoes.js";
 import { conferirLicoes } from "../modulos/exercicios.js";
 import { iniciarLicao } from "../modulos/licao.js";
 import { desenharTrilha, estrelas } from "../modulos/trilha.js";
@@ -167,7 +167,7 @@ el.apagar.addEventListener("click", () => {
 // ==========================================================
 // Início
 // ==========================================================
-const problemas = conferirLicoes(LICOES);
+const problemas = conferirLicoes(LICOES, CONECTORES);
 if (problemas.length) console.warn("Problemas em js/dados/licoes.js:\n- " + problemas.join("\n- "));
 
 // Sem legenda nos exercícios: senão o avatar mostra a resposta escrita

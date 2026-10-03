@@ -78,9 +78,31 @@ body[data-tela="carregando"] .topo {
   justify-content: center;
 }
 
-/* Zigue-zague: desloca os itens para os lados */
-.trilha__item:nth-child(4n + 2) { transform: translateX(-70px); }
-.trilha__item:nth-child(4n + 4) { transform: translateX(70px); }
+/* Título de cada unidade */
+.trilha__unidade {
+  margin: 18px 0 4px;
+  padding: 10px 18px;
+  border-radius: var(--raio-medio);
+  background: var(--gradiente);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.trilha__unidade:first-child {
+  margin-top: 0;
+}
+
+/* Zigue-zague: desloca as lições para os lados (dentro de cada unidade) */
+.trilha__unidade + .trilha__item + .trilha__item,
+.trilha__unidade + .trilha__item + .trilha__item + .trilha__item + .trilha__item + .trilha__item {
+  transform: translateX(-70px);
+}
+
+.trilha__unidade + .trilha__item + .trilha__item + .trilha__item + .trilha__item {
+  transform: translateX(70px);
+}
 
 .no-licao {
   display: grid;
@@ -214,9 +236,21 @@ body[data-tela="carregando"] .topo {
   font-size: 3.4rem;
 }
 
+/* Revisão: cor diferente para destacar */
+.no-licao[data-tipo="revisao"]:not([data-estado="concluida"]):not(:disabled) .no-licao__circulo {
+  background: linear-gradient(135deg, #9254de, #f759ab);
+  box-shadow: 0 5px 0 #722ed1;
+}
+
 @media (max-width: 560px) {
-  .trilha__item:nth-child(4n + 2) { transform: translateX(-24px); }
-  .trilha__item:nth-child(4n + 4) { transform: translateX(24px); }
+  .trilha__unidade + .trilha__item + .trilha__item,
+  .trilha__unidade + .trilha__item + .trilha__item + .trilha__item + .trilha__item + .trilha__item {
+    transform: translateX(-24px);
+  }
+
+  .trilha__unidade + .trilha__item + .trilha__item + .trilha__item + .trilha__item {
+    transform: translateX(24px);
+  }
 }
 
 /* ==========================================================

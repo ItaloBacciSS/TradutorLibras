@@ -155,7 +155,13 @@ Para editar:
 
 Área separada do tradutor, no estilo Duolingo:
 
-- **Trilha de lições:** a próxima abre quando a anterior é concluída.
+- **Trilha com 20 lições em 4 unidades** (8 palavras novas por lição, 128 no total).
+  Cada unidade termina com uma **revisão**, que mistura palavras das lições anteriores.
+  A próxima lição abre quando a anterior é concluída.
+- **Regra de ouro: o aluno nunca vê palavra que ainda não aprendeu.** As opções erradas
+  e as peças extras saem só de palavras já ensinadas, e as frases só usam palavras já
+  ensinadas + palavras de ligação (`CONECTORES`: o, a, de, para…), que em Libras
+  normalmente não têm sinal próprio.
 - **4 tipos de exercício**, criados sozinhos a partir das palavras e frases de cada lição:
 
   | Exercício | Como funciona |
@@ -181,7 +187,9 @@ Para editar:
   mesmo progresso; limpar os dados do navegador apaga tudo.
 
 **Para editar as lições**, abra `js/dados/licoes.js` (o começo do arquivo explica o formato).
-Cada lição tem de 4 a 8 palavras e de 1 a 3 frases curtas, sem pontuação.
+Cada lição tem de 4 a 8 palavras **novas** e de 1 a 3 frases curtas, sem pontuação.
+Revisões (`revisao: true`) usam de 4 a 10 palavras de lições anteriores.
+Se uma frase usar palavra que ainda não foi ensinada, o teste avisa qual é.
 Todas começaram com `validado: false`: confira com a comunidade surda se o avatar
 faz o sinal certo de cada palavra. Depois de editar, rode
 `python -m pytest testes/test_aprender.py` (o teste `test_licoes_sem_problemas` avisa erros).

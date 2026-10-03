@@ -42,12 +42,29 @@ def js(navegador, servidor_local):
 # Lições (dados)
 # ==========================================================
 def test_licoes_sem_problemas(js):
-    problemas = js.evaluate("ex.conferirLicoes(dados.LICOES)")
+    problemas = js.evaluate("ex.conferirLicoes(dados.LICOES, dados.CONECTORES)")
     assert problemas == [], "\n".join(problemas)
 
 
-def test_tem_pelo_menos_10_licoes(js):
-    assert js.evaluate("dados.LICOES.length") >= 10
+def test_tem_pelo_menos_20_licoes_e_unidades_com_revisao(js):
+    assert js.evaluate("dados.LICOES.length") >= 20
+    # Toda unidade termina com uma revisão
+    assert js.evaluate("dados.UNIDADES.every((u) => u.licoes.at(-1).revisao === true)")
+
+
+def test_conferir_licoes_acha_palavra_nao_ensinada(js):
+    problemas = "\n".join(
+        js.evaluate(
+            """() => ex.conferirLicoes([
+              { id: "a", titulo: "A", palavras: ["Oi", "Tchau", "Casa", "Pai"], frases: ["Oi pai"], validado: false },
+              { id: "b", titulo: "B", palavras: ["Mãe", "Água", "Pão", "Oi"], frases: ["Oi cachorro"], validado: false },
+              { id: "r", titulo: "R", revisao: true, palavras: ["Oi", "Pai", "Mãe", "Gato"], frases: ["Oi mãe"], validado: false },
+            ], ["o", "a"])"""
+        )
+    )
+    assert '"Oi" já foi ensinada na lição a' in problemas
+    assert 'usa "cachorro", que ainda não foi ensinada' in problemas
+    assert 'a revisão usa "Gato", que não foi ensinada antes' in problemas
 
 
 def test_conferir_licoes_acha_erros(js):
@@ -103,18 +120,58 @@ def test_ver_vem_antes_de_praticar_a_mesma_palavra(js):
 
 def test_quantidades_por_tipo(js):
     tipos = [e["tipo"] for e in gerar(js)]
-    assert tipos.count("qual-sinal") == 2
-    assert tipos.count("monte-frase") == 2
+    frases = js.evaluate("dados.LICOES[0].frases.length")
+    assert tipos.count("qual-sinal") == 3
+    assert tipos.count("monte-frase") == min(3, frases)
 
 
-@pytest.mark.parametrize("indice", range(10))
+def test_revisao_nao_tem_ver(js):
+    indice = js.evaluate("dados.LICOES.findIndex((l) => l.revisao)")
+    tipos = [e["tipo"] for e in gerar(js, indice)]
+    assert "ver" not in tipos
+    assert tipos.count("que-sinal") == js.evaluate(f"dados.LICOES[{indice}].palavras.length")
+
+
+@pytest.mark.parametrize("indice", range(20))
+def test_nunca_aparece_palavra_que_o_aluno_nao_aprendeu(js, indice):
+    """Em qualquer exercício, todas as opções e peças já foram ensinadas antes daquele momento."""
+    desconhecidas = js.evaluate(
+        """(indice) => {
+          const licao = dados.LICOES[indice];
+          const conectores = new Set(dados.CONECTORES.map(ex.normalizar));
+          const problemas = [];
+          for (let semente = 1; semente <= 20; semente++) {
+            let s = semente;
+            const aleatorio = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+            const conhecidas = new Set(ex.palavrasAnteriores(licao, dados.LICOES).map(ex.normalizar));
+            if (licao.revisao) licao.palavras.forEach((p) => conhecidas.add(ex.normalizar(p)));
+            for (const e of ex.gerarExercicios(licao, dados.LICOES, aleatorio)) {
+              if (e.tipo === "ver") { conhecidas.add(ex.normalizar(e.palavra)); continue; }
+              const partes = new Set([...conhecidas].flatMap((p) => p.split(" ")));
+              const usadas = e.tipo === "monte-frase" ? e.pecas : e.opcoes;
+              for (const u of usadas) {
+                const n = ex.normalizar(u);
+                const ok = e.tipo === "monte-frase" ? partes.has(n) || conectores.has(n) : conhecidas.has(n);
+                if (!ok) problemas.push(`${e.tipo}: ${u}`);
+              }
+            }
+          }
+          return [...new Set(problemas)];
+        }""",
+        indice,
+    )
+    assert desconhecidas == []
+
+
+@pytest.mark.parametrize("indice", range(20))
 def test_opcoes_validas_em_todas_as_licoes(js, indice):
     for exercicio in gerar(js, indice, semente=indice + 7):
         if exercicio["tipo"] in ("que-sinal", "qual-sinal"):
             opcoes = exercicio["opcoes"]
             assert exercicio["resposta"] in opcoes
             assert len(opcoes) == len({o.lower() for o in opcoes}), "opção repetida"
-            assert len(opcoes) == (4 if exercicio["tipo"] == "que-sinal" else 3)
+            # No começo da 1ª lição o aluno só conhece 2 palavras: aí são só 2 opções
+            assert 2 <= len(opcoes) <= (4 if exercicio["tipo"] == "que-sinal" else 3)
         if exercicio["tipo"] == "monte-frase":
             pecas = exercicio["pecas"]
             for palavra in exercicio["resposta"].split():
@@ -283,11 +340,12 @@ def fazer_licao(pagina, errar_tipos=()):
 def test_trilha_inicial(abrir_pagina):
     pagina, erros = abrir_aprender(abrir_pagina)
     nos = pagina.locator(".no-licao")
-    expect(nos).to_have_count(10)
+    expect(nos).to_have_count(20)
+    expect(pagina.locator(".trilha__unidade")).to_have_count(4)
     expect(nos.nth(0)).to_be_enabled()
     expect(nos.nth(0)).to_have_attribute("data-atual", "true")
     expect(nos.nth(1)).to_be_disabled()
-    expect(pagina.locator("#placar-licoes")).to_have_text("0/10")
+    expect(pagina.locator("#placar-licoes")).to_have_text("0/20")
     assert erros == []
 
 
@@ -307,7 +365,7 @@ def test_licao_completa_sem_erros(abrir_pagina):
     nos = pagina.locator(".no-licao")
     expect(nos.nth(0)).to_have_attribute("data-estado", "concluida")
     expect(nos.nth(1)).to_be_enabled()
-    expect(pagina.locator("#placar-licoes")).to_have_text("1/10")
+    expect(pagina.locator("#placar-licoes")).to_have_text("1/20")
     assert erros == []
 
 
@@ -331,15 +389,16 @@ def test_resposta_errada_mostra_a_certa_e_repete_depois(abrir_pagina):
 
     pagina.click(".licao__principal")
     fazer_licao(pagina)
-    # 1 erro em 10 exercícios com nota → 90% → ainda 3 estrelas
-    expect(pagina.locator("#resultado-acertos")).to_have_text("90%")
+    # Lição 1: 8 "Que sinal" + 3 "Qual é o sinal" + 2 "Monte a frase" = 13 com nota.
+    # 1 erro → 12/13 = 92% → ainda 3 estrelas
+    expect(pagina.locator("#resultado-acertos")).to_have_text("92%")
 
 
 def test_varios_erros_dao_menos_estrelas(abrir_pagina):
     pagina, _ = abrir_aprender(abrir_pagina)
     pagina.locator(".no-licao").first.click()
     fazer_licao(pagina, errar_tipos=("que-sinal", "qual-sinal", "monte-frase"))
-    expect(pagina.locator("#resultado-acertos")).to_have_text("70%")
+    expect(pagina.locator("#resultado-acertos")).to_have_text("77%")  # 10/13
     expect(pagina.locator("#resultado-estrelas")).to_have_attribute("aria-label", "2 de 3 estrelas")
 
 
@@ -395,7 +454,7 @@ def test_recomecar_do_zero_pede_confirmacao(abrir_pagina):
 
 def test_progresso_estragado_nao_quebra_a_pagina(abrir_pagina):
     pagina, erros = abrir_pagina("/aprender", antes_de_abrir=f"localStorage.setItem('{CHAVE}', '{{{{ estragado')")
-    expect(pagina.locator(".no-licao")).to_have_count(10)
+    expect(pagina.locator(".no-licao")).to_have_count(20)
     assert erros == []
 
 
