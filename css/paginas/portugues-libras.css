@@ -3,98 +3,241 @@
    Estilos exclusivos do tradutor (html/portugues-libras.html).
    ========================================================== */
 
-/* ---------- Grade de duas colunas ---------- */
-.tradutor {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: 24px;
-  align-items: start;
-}
-
-@media (max-width: 860px) {
-  .tradutor {
-    grid-template-columns: 1fr;
-  }
-}
-
-.coluna {
+.pagina-tradutor {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+  max-width: 720px;
 }
 
-/* ---------- Linha abaixo do campo (atalho e contador) ---------- */
-.linha-info {
-  display: flex;
-  justify-content: space-between;
-  margin: 6px 0 16px;
-  color: var(--texto-suave);
-  font-size: 0.85rem;
+/* ==========================================================
+   1. Campo de texto
+   ========================================================== */
+.campo {
+  position: relative;
+  border: 3px solid var(--borda);
+  border-radius: var(--raio-medio);
+  background: #fff;
+  transition: border-color var(--transicao), box-shadow var(--transicao);
 }
 
-/* ---------- Quadro "Sendo sinalizado agora" ---------- */
-.em-libras {
-  min-height: 64px;
-  margin-top: 4px;
-  padding: 16px;
-  border-left: 5px solid var(--azul);
-  border-radius: var(--raio-pequeno);
-  background: var(--fundo);
-  font-size: 1.25rem;
+.campo:focus-within {
+  border-color: var(--azul);
+  box-shadow: 0 0 0 5px rgba(47, 84, 235, 0.15);
+}
+
+.campo.campo--erro {
+  border-color: var(--vermelho);
+  animation: tremer 0.3s;
+}
+
+.campo__texto {
+  display: block;
+  width: 100%;
+  min-height: 130px;
+  padding: 18px 56px 8px 18px;
+  border: none;
+  border-radius: var(--raio-medio);
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  resize: none;
+}
+
+.campo__texto:focus {
+  outline: none;
+}
+
+.campo__texto::placeholder {
+  color: #9aa8c4;
   font-weight: 600;
-  word-break: break-word;
 }
 
-.em-libras--vazio {
-  color: var(--texto-suave);
-  font-size: 1rem;
-  font-weight: 400;
+/* Botão "X" para limpar, no canto do campo */
+.campo__limpar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
 }
 
-/* ---------- Frases para praticar ---------- */
-.grupo-frases + .grupo-frases {
-  margin-top: 16px;
-}
-
-/* ---------- Histórico ---------- */
-.cabecalho-historico {
+/* Barra de baixo: microfone e contador */
+.campo__rodape {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 12px;
+  padding: 0 12px 12px;
 }
 
-.cabecalho-historico h2 {
-  margin: 0;
+.campo__contador {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
-.historico {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.campo__contador--limite {
+  color: var(--vermelho);
 }
 
-.historico li + li {
-  border-top: 1px solid var(--borda);
+.botao-traduzir {
+  margin-top: 20px;
 }
 
-.historico__item {
-  width: 100%;
-  padding: 10px 4px;
-  border: none;
-  background: none;
-  color: var(--texto);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
+/* ==========================================================
+   2. Balão de resultado (muda conforme o estado)
+   data-estado = "inicial" | "carregando" | "sinalizando" | "erro"
+   ========================================================== */
+.balao {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: var(--raio-medio);
+  background: var(--fundo);
+  animation: aparecer 0.25s ease;
 }
 
-.historico__item:hover {
+.balao__icone {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff;
   color: var(--azul);
 }
 
-.historico__vazio {
-  padding: 10px 4px;
+.balao__corpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.balao__mensagem {
+  margin: 0;
   color: var(--texto-suave);
+  font-weight: 700;
+}
+
+.balao__frase {
+  margin: 2px 0 0;
+  color: var(--texto);
+  font-size: 1.35rem;
+  font-weight: 900;
+  word-break: break-word;
+}
+
+.balao__acao {
+  flex-shrink: 0;
+}
+
+/* --- Elementos que só aparecem em certos estados --- */
+.balao .spinner,
+.balao__frase,
+.balao__acao {
+  display: none;
+}
+
+/* Carregando: mostra o spinner no lugar do ícone */
+.balao[data-estado="carregando"] .balao__icone {
+  display: none;
+}
+
+.balao[data-estado="carregando"] .spinner {
+  display: block;
+}
+
+/* Sinalizando: destaque colorido + frase + botão repetir */
+.balao[data-estado="sinalizando"] {
+  background: linear-gradient(135deg, #e6f7ff 0%, #f4ffb8 100%);
+}
+
+.balao[data-estado="sinalizando"] .balao__frase,
+.balao[data-estado="sinalizando"] .balao__acao {
+  display: block;
+}
+
+.balao[data-estado="sinalizando"] .balao__icone {
+  background: var(--limao);
+  color: var(--texto);
+}
+
+/* Erro: vermelho + botão tentar de novo */
+.balao[data-estado="erro"] {
+  background: #fff1f0;
+}
+
+.balao[data-estado="erro"] .balao__icone {
+  background: var(--vermelho);
+  color: #fff;
+}
+
+/* Troca o ícone: alerta no erro, balão de fala nos outros estados */
+.balao__icone-erro,
+.balao[data-estado="erro"] .balao__icone-normal {
+  display: none;
+}
+
+.balao[data-estado="erro"] .balao__icone-erro {
+  display: block;
+}
+
+.balao[data-estado="erro"] .balao__mensagem {
+  color: #a8071a;
+}
+
+.balao[data-estado="erro"] .balao__acao {
+  display: block;
+}
+
+@media (max-width: 560px) {
+  .balao {
+    flex-wrap: wrap;
+  }
+
+  .balao__acao {
+    width: 100%;
+  }
+
+  .balao__acao .botao {
+    width: 100%;
+  }
+}
+
+/* ==========================================================
+   3. Experimente (abas com frases e recentes)
+   ========================================================== */
+.experimente__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 560px) {
+  /* No celular as abas ocupam a largura toda, divididas por igual */
+  .experimente__cabecalho .abas {
+    display: flex;
+    width: 100%;
+  }
+
+  .experimente__cabecalho .aba {
+    flex: 1;
+    padding: 6px 8px;
+  }
+}
+
+.experimente__vazio {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+.experimente__rodape {
+  margin-top: 14px;
+  text-align: right;
 }

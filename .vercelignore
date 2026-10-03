@@ -1,4 +1,8 @@
 # Arquivos que NÃO vão para o site publicado no Vercel
 servidor.py
 README.md
+pytest.ini
+requirements-testes.txt
+testes/
 __pycache__/
+.pytest_cache/

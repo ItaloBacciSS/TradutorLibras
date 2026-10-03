@@ -3,57 +3,121 @@
    Estilos exclusivos da página inicial (html/index.html).
    ========================================================== */
 
-.hero {
-  padding: 24px 0 8px;
-}
-
 /* ---------- Cartões dos dois caminhos ---------- */
 .caminhos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin: 8px 0 40px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
 }
 
 .caminho {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 12px;
   color: inherit;
   text-decoration: none;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  border-top: 8px solid var(--limao);
+  transition: transform var(--transicao), box-shadow var(--transicao);
 }
 
 .caminho:hover {
-  transform: translateY(-3px);
-  border-color: var(--azul);
+  transform: translateY(-6px) rotate(-0.5deg);
+  box-shadow: var(--sombra-forte);
 }
 
-.caminho__direcao {
-  color: var(--azul);
-  font-size: 1.35rem;
-  font-weight: 700;
+.caminho--dev {
+  border-top-color: #ffc069;
 }
 
-.caminho__descricao {
-  margin: 0;
-  color: var(--texto-suave);
-}
-
-.caminho__acao {
-  margin-top: auto;
-  color: var(--azul);
-  font-weight: 600;
-}
-
-/* ---------- Seção "Como funciona" ---------- */
-.info-grade {
+.caminho__icone {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: var(--gradiente);
+  color: #fff;
 }
 
-.info-grade p {
+.caminho__icone .icone {
+  width: 30px;
+  height: 30px;
+}
+
+.caminho--dev .caminho__icone {
+  background: linear-gradient(135deg, #ffa940, #f759ab);
+}
+
+.caminho__titulo {
+  font-size: 1.6rem;
+}
+
+.caminho__texto {
   margin: 0;
   color: var(--texto-suave);
+  font-size: 1.05rem;
+}
+
+.caminho__botao {
+  margin-top: 8px;
+}
+
+/* ---------- Como funciona ---------- */
+.passos {
+  margin-top: 48px;
+  text-align: center;
+}
+
+.passos__titulo {
+  margin-bottom: 20px;
+}
+
+.passos__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.passo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: var(--raio-medio);
+  background: #fff;
+  box-shadow: var(--sombra);
+  font-weight: 700;
+  text-align: left;
+}
+
+.passo__numero {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-weight: 900;
+}
+
+.passo:nth-child(2) .passo__numero {
+  background: var(--ciano);
+}
+
+.passo:nth-child(3) .passo__numero {
+  background: var(--limao);
+  color: var(--texto);
+}
+
+.passos__nota {
+  max-width: 600px;
+  margin: 24px auto 0;
+  color: var(--texto-suave);
+  font-size: 0.95rem;
 }

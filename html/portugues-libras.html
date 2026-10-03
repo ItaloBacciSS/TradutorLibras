@@ -16,104 +16,107 @@
 <body>
   <!--
     Atenção: com o avatar aberto, o VLibras traduz qualquer texto clicado.
-    A classe "vlibras-links" faz ele IGNORAR botões e links, para que
-    eles funcionem normalmente.
+    A classe "vlibras-links" faz ele IGNORAR botões e links,
+    para que eles funcionem normalmente.
   -->
   <a class="pular vlibras-links" href="#conteudo">Pular para o conteúdo</a>
 
-  <!-- ===================== CABEÇALHO ===================== -->
+  <!-- ===================== TOPO ===================== -->
   <header class="topo">
-    <div class="container">
+    <div class="container navegacao">
       <a class="marca vlibras-links" href="/">
-        <span class="marca-icone" aria-hidden="true">L</span>
+        <span class="marca__icone" aria-hidden="true">L</span>
         Tradutor de Libras
       </a>
       <nav class="menu" aria-label="Menu principal">
         <a class="vlibras-links" href="/">Início</a>
-        <a class="vlibras-links" href="/portugues-libras" aria-current="page">Português → Libras</a>
-        <a class="vlibras-links" href="/libras-portugues">Libras → Português</a>
+        <a class="vlibras-links" href="/portugues-libras" aria-current="page"><span class="menu__longo">Português → Libras</span><span class="menu__curto">PT → Libras</span></a>
+        <a class="vlibras-links" href="/libras-portugues"><span class="menu__longo">Libras → Português</span><span class="menu__curto">Libras → PT</span></a>
       </nav>
+    </div>
+
+    <div class="container topo__titulo">
+      <h1>Português → Libras</h1>
+      <p>Escreva uma frase e veja o avatar fazer os sinais.</p>
     </div>
   </header>
 
   <!-- ===================== CONTEÚDO ===================== -->
   <main id="conteudo">
-    <div class="container">
-      <h1>Português → Libras</h1>
-      <p class="subtitulo">
-        Escreva ou fale uma frase e clique em <strong>Traduzir</strong>. O avatar aparece
-        no canto da tela e faz os sinais.
-      </p>
+    <div class="container pagina-tradutor">
 
-      <div class="tradutor">
+      <!-- ========== 1. TRADUTOR ========== -->
+      <section class="cartao" aria-label="Tradutor">
 
-        <!-- ========== Coluna da esquerda: entrada ========== -->
-        <div class="coluna">
+        <!-- Campo de texto -->
+        <div class="campo" id="campo">
+          <label for="texto" class="sr-only">Texto em português</label>
+          <textarea id="texto" class="campo__texto" maxlength="500"
+            placeholder="Digite aqui… Ex.: Bom dia!"></textarea>
 
-          <!-- Campo de texto e botões -->
-          <section class="cartao" aria-labelledby="titulo-entrada">
-            <h2 id="titulo-entrada" class="sr-only">Texto em português</h2>
-            <label class="rotulo" for="texto">Texto em português</label>
-            <textarea id="texto" class="campo-texto" maxlength="500"
-              placeholder="Ex.: Bom dia! Qual é o seu nome?"></textarea>
+          <button type="button" id="btn-limpar" class="botao-icone botao-icone--pequeno campo__limpar vlibras-links"
+            aria-label="Apagar texto" title="Apagar texto" hidden>
+            <svg class="icone icone--pequeno" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
 
-            <div class="linha-info">
-              <span>Atalho: Ctrl + Enter para traduzir</span>
-              <span id="contador">0/500</span>
-            </div>
-
-            <div class="botoes">
-              <button type="button" id="btn-traduzir" class="botao vlibras-links">Traduzir</button>
-              <button type="button" id="btn-falar" class="botao botao--secundario vlibras-links" hidden>Falar</button>
-              <button type="button" id="btn-repetir" class="botao botao--secundario vlibras-links" disabled>Repetir</button>
-              <button type="button" id="btn-limpar" class="botao botao--secundario vlibras-links">Limpar</button>
-            </div>
-
-            <p id="status" class="status" role="status" aria-live="polite"></p>
-          </section>
-
-          <!-- Frase que o avatar está sinalizando -->
-          <section class="cartao" aria-labelledby="titulo-traduzindo">
-            <h2 id="titulo-traduzindo">Sendo sinalizado agora</h2>
-            <!-- O script coloca o texto aqui e simula um clique para o VLibras traduzir -->
-            <div id="alvo-libras" class="em-libras em-libras--vazio">Nenhuma frase traduzida ainda.</div>
-          </section>
+          <div class="campo__rodape">
+            <button type="button" id="btn-falar" class="botao-icone vlibras-links"
+              aria-label="Falar em vez de digitar" title="Falar em vez de digitar" hidden>
+              <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button>
+            <span id="contador" class="campo__contador" aria-live="polite">0/500</span>
+          </div>
         </div>
 
-        <!-- ========== Coluna da direita: apoio ========== -->
-        <div class="coluna">
+        <!-- Botão principal -->
+        <button type="button" id="btn-traduzir" class="botao botao--grande botao-traduzir vlibras-links">
+          Traduzir em Libras
+          <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
 
-          <!-- Frases prontas (preenchidas por js/modulos/frases.js) -->
-          <section class="cartao" aria-labelledby="titulo-exemplos">
-            <h2 id="titulo-exemplos">Frases para praticar</h2>
-            <div id="lista-frases"></div>
-          </section>
+        <!-- Balão de resultado: o JS troca o data-estado -->
+        <div id="balao" class="balao" data-estado="inicial" role="status" aria-live="polite">
+          <span class="balao__icone" aria-hidden="true">
+            <!-- ícone de alerta (só no estado de erro) -->
+            <svg class="icone balao__icone-erro" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <!-- ícone de balão de fala (nos outros estados) -->
+            <svg class="icone balao__icone-normal" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>
+          </span>
+          <span class="spinner" aria-hidden="true"></span>
 
-          <!-- Histórico (preenchido por js/modulos/historico.js) -->
-          <section class="cartao" aria-labelledby="titulo-historico">
-            <div class="cabecalho-historico">
-              <h2 id="titulo-historico">Últimas traduções</h2>
-              <button type="button" id="btn-apagar-historico" class="chip vlibras-links">Apagar</button>
-            </div>
-            <ul id="historico" class="historico"></ul>
-          </section>
+          <div class="balao__corpo">
+            <p id="balao-mensagem" class="balao__mensagem">Escreva uma frase ou escolha uma das sugestões abaixo.</p>
+            <!-- O VLibras traduz o texto deste elemento quando ele recebe o clique simulado -->
+            <p id="alvo-libras" class="balao__frase"></p>
+          </div>
 
-          <p class="dica">
-            Dica: no avatar você pode mudar a velocidade, trocar de personagem e
-            consultar o dicionário. Com o avatar aberto, clicar em qualquer texto
-            da página também mostra a tradução dele.
-          </p>
+          <div class="balao__acao">
+            <button type="button" id="btn-acao-balao" class="botao botao--secundario vlibras-links">
+              <svg class="icone icone--pequeno" viewBox="0 0 24 24" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></svg>
+              <span id="btn-acao-balao-texto">Repetir</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 2. EXPERIMENTE ========== -->
+      <section class="cartao" aria-labelledby="titulo-experimente">
+        <div class="experimente__cabecalho">
+          <h2 id="titulo-experimente">Experimente</h2>
+          <!-- Abas criadas pelo JS (js/modulos/frases.js + historico.js) -->
+          <div id="abas" class="abas" role="tablist" aria-label="Grupos de frases"></div>
         </div>
 
-      </div>
+        <div id="painel-frases" role="tabpanel"></div>
+      </section>
+
     </div>
   </main>
 
   <!-- ===================== RODAPÉ ===================== -->
   <footer class="rodape">
     <div class="container">
-      <p>Tradução em Libras feita com o <a class="vlibras-links" href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras" target="_blank" rel="noopener">VLibras</a>, do Governo Federal.</p>
-      <p>A tradução automática pode ter erros. Confira com um intérprete ou com a comunidade surda.</p>
+      <p>Tradução feita com o <a class="vlibras-links" href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras" target="_blank" rel="noopener">VLibras</a>. A tradução automática pode ter erros.</p>
     </div>
   </footer>
 

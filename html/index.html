@@ -16,18 +16,23 @@
 <body>
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-  <!-- ===================== CABEÇALHO ===================== -->
+  <!-- ===================== TOPO ===================== -->
   <header class="topo">
-    <div class="container">
+    <div class="container navegacao">
       <a class="marca" href="/">
-        <span class="marca-icone" aria-hidden="true">L</span>
+        <span class="marca__icone" aria-hidden="true">L</span>
         Tradutor de Libras
       </a>
       <nav class="menu" aria-label="Menu principal">
         <a href="/" aria-current="page">Início</a>
-        <a href="/portugues-libras">Português → Libras</a>
-        <a href="/libras-portugues">Libras → Português</a>
+        <a href="/portugues-libras"><span class="menu__longo">Português → Libras</span><span class="menu__curto">PT → Libras</span></a>
+        <a href="/libras-portugues"><span class="menu__longo">Libras → Português</span><span class="menu__curto">Libras → PT</span></a>
       </nav>
+    </div>
+
+    <div class="container topo__titulo">
+      <h1>Fale com as mãos!</h1>
+      <p>Traduza frases do português para Libras e aprenda a Língua Brasileira de Sinais.</p>
     </div>
   </header>
 
@@ -35,62 +40,50 @@
   <main id="conteudo">
     <div class="container">
 
-      <!-- Apresentação -->
-      <section class="hero">
-        <h1>Traduza e aprenda Libras</h1>
-        <p class="subtitulo">
-          Digite ou fale uma frase em português e veja um avatar 3D fazer os sinais
-          em Libras, a Língua Brasileira de Sinais. Uma ferramenta para a escola
-          aprender e se comunicar melhor.
+      <!-- Os dois caminhos -->
+      <section class="caminhos" aria-label="Escolha a direção da tradução">
+        <a class="cartao caminho" href="/portugues-libras">
+          <span class="caminho__icone" aria-hidden="true">
+            <svg class="icone" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          </span>
+          <span class="selo">Disponível</span>
+          <h2 class="caminho__titulo">Português → Libras</h2>
+          <p class="caminho__texto">Escreva ou fale. O avatar faz os sinais.</p>
+          <span class="botao caminho__botao">Começar</span>
+        </a>
+
+        <a class="cartao caminho caminho--dev" href="/libras-portugues">
+          <span class="caminho__icone" aria-hidden="true">
+            <svg class="icone" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </span>
+          <span class="selo selo--dev">Em desenvolvimento</span>
+          <h2 class="caminho__titulo">Libras → Português</h2>
+          <p class="caminho__texto">Faça os sinais na câmera e veja o texto.</p>
+          <span class="botao botao--secundario caminho__botao">Saiba mais</span>
+        </a>
+      </section>
+
+      <!-- Como funciona, em 3 passos -->
+      <section class="passos" aria-labelledby="titulo-passos">
+        <h2 id="titulo-passos" class="passos__titulo">Como funciona</h2>
+        <ol class="passos__lista">
+          <li class="passo">
+            <span class="passo__numero">1</span>
+            <span>Escreva ou fale uma frase</span>
+          </li>
+          <li class="passo">
+            <span class="passo__numero">2</span>
+            <span>Clique em <strong>Traduzir</strong></span>
+          </li>
+          <li class="passo">
+            <span class="passo__numero">3</span>
+            <span>Veja o avatar fazer os sinais</span>
+          </li>
+        </ol>
+        <p class="passos__nota">
+          Libras tem gramática própria, então a tradução não é palavra por palavra.
+          O avatar é do <a href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras" target="_blank" rel="noopener">VLibras</a>, ferramenta pública e gratuita.
         </p>
-      </section>
-
-      <!-- Os dois caminhos de tradução -->
-      <section aria-labelledby="titulo-caminhos">
-        <h2 id="titulo-caminhos" class="sr-only">Escolha a direção da tradução</h2>
-        <div class="caminhos">
-          <a class="cartao caminho" href="/portugues-libras">
-            <span class="selo">Disponível</span>
-            <span class="caminho__direcao">Português → Libras</span>
-            <p class="caminho__descricao">Escreva ou fale um texto em português. O avatar mostra a tradução em sinais.</p>
-            <span class="caminho__acao">Começar a traduzir →</span>
-          </a>
-
-          <a class="cartao caminho" href="/libras-portugues">
-            <span class="selo selo--dev">Em desenvolvimento</span>
-            <span class="caminho__direcao">Libras → Português</span>
-            <p class="caminho__descricao">Faça os sinais em frente à câmera e veja o texto em português. Em breve.</p>
-            <span class="caminho__acao">Saiba mais →</span>
-          </a>
-        </div>
-      </section>
-
-      <!-- Como funciona -->
-      <section class="cartao" aria-labelledby="titulo-sobre">
-        <h2 id="titulo-sobre">Como funciona</h2>
-        <div class="info-grade">
-          <div>
-            <h3>Libras é uma língua</h3>
-            <p>
-              Libras tem gramática e estrutura próprias. Por isso a tradução não é
-              palavra por palavra: o texto é adaptado para a ordem e a forma da Libras.
-            </p>
-          </div>
-          <div>
-            <h3>Avatar VLibras</h3>
-            <p>
-              Os sinais são feitos pelo avatar do VLibras, ferramenta pública e gratuita
-              do Governo Federal, desenvolvida pela UFPB.
-            </p>
-          </div>
-          <div>
-            <h3>Para aprender</h3>
-            <p>
-              Você pode repetir, mudar a velocidade e testar frases do dia a dia da escola.
-              As frases de exemplo são conferidas com pessoas surdas e intérpretes.
-            </p>
-          </div>
-        </div>
       </section>
 
     </div>
@@ -100,7 +93,6 @@
   <footer class="rodape">
     <div class="container">
       <p>Tradutor de Libras: projeto escolar.</p>
-      <p>Tradução em Libras feita com o <a href="https://www.gov.br/governodigital/pt-br/acessibilidade-e-usuario/vlibras" target="_blank" rel="noopener">VLibras</a>.</p>
     </div>
   </footer>
 </body>

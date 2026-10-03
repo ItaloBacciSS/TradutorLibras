@@ -1,9 +1,14 @@
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
+.venv/
 
 # Vercel
 .vercel/
+
+# Cópias soltas que o app do Claude cria (não fazem parte do projeto)
+Claude outputs/
 
 # Sistema
 .DS_Store

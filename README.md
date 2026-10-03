@@ -9,40 +9,51 @@ feito para alunos ouvintes de uma escola traduzirem e aprenderem Libras.
 TradutorLibras/
 ├── servidor.py                  Servidor local para testar (Python)
 ├── vercel.json                  Rotas do site (usadas pelo Vercel E pelo servidor.py)
+├── pytest.ini                   Configuração dos testes
+├── requirements-testes.txt      Bibliotecas dos testes (pytest, playwright)
 ├── .vercelignore                Arquivos que não vão para o site publicado
 ├── .gitignore                   Arquivos que o Git ignora
 ├── README.md                    Este arquivo
 │
 ├── html/                        Páginas
-│   ├── index.html               Página inicial (descrição + os dois caminhos)
+│   ├── index.html               Página inicial (os dois caminhos + como funciona)
 │   ├── portugues-libras.html    Tradutor Português → Libras
 │   └── libras-portugues.html    Libras → Português ("em desenvolvimento")
 │
 ├── css/                         Estilos
-│   ├── base.css                 Cores (variáveis), reset, tipografia, acessibilidade
-│   ├── layout.css               Container, cabeçalho, menu e rodapé
-│   ├── componentes.css          Cartão, selo, botões, chips, campo, status, dica
+│   ├── base.css                 Cores (variáveis), fonte, reset, acessibilidade
+│   ├── layout.css               Faixa colorida do topo, menu, rodapé
+│   ├── componentes.css          Cartão, selo, botões, chips, abas, spinner, animações
 │   └── paginas/                 Estilos exclusivos de cada página
 │       ├── inicio.css
 │       ├── portugues-libras.css
 │       └── libras-portugues.css
 │
-└── js/                          JavaScript
-    ├── modulos/                 Peças reutilizáveis, uma responsabilidade cada
-    │   ├── config.js            Configurações gerais (limites, tempos, chaves)
-    │   ├── vlibras.js           Integração com o avatar do VLibras
-    │   ├── frases.js            Frases prontas para praticar
-    │   ├── historico.js         Últimas traduções (salvas no navegador)
-    │   ├── voz.js               Entrada por voz (microfone)
-    │   └── status.js            Mensagens para o usuário
-    └── paginas/                 Script principal de cada página
-        └── portugues-libras.js
+├── js/                          JavaScript
+│   ├── modulos/                 Peças reutilizáveis, uma responsabilidade cada
+│   │   ├── config.js            Configurações gerais (limites, tempos, chaves)
+│   │   ├── validacao.js         Confere e limpa o texto antes de traduzir
+│   │   ├── vlibras.js           Integração com o avatar do VLibras (+ erros)
+│   │   ├── balao.js             Balão de resultado (inicial/carregando/sinalizando/erro)
+│   │   ├── abas.js              Abas acessíveis (funcionam com o teclado)
+│   │   ├── frases.js            Frases prontas para praticar
+│   │   ├── historico.js         Frases recentes (salvas no navegador)
+│   │   └── voz.js               Entrada por voz (microfone)
+│   └── paginas/                 Script principal de cada página
+│       └── portugues-libras.js
+│
+└── testes/                      Testes automáticos (pytest + Playwright)
+    ├── conftest.py              Peças comuns: servidor, navegador, VLibras falso
+    ├── test_servidor.py         servidor.py: porta, rotas, vercel.json com problema
+    ├── test_validacao.py        Regras do texto (vazio, só emojis, longo…)
+    └── test_tradutor.py         A página no navegador, com foco em exceções
 ```
 
 **Regras de organização**
 - Cada página HTML carrega `base.css`, `layout.css`, `componentes.css` e o seu CSS em `css/paginas/`.
 - Cada página com lógica tem um script em `js/paginas/`, que importa o que precisa de `js/modulos/`.
-- Nomes de classes CSS: `bloco`, `bloco__parte` e `bloco--variacao` (ex.: `caminho__acao`, `botao--secundario`).
+- Nomes de classes CSS: `bloco`, `bloco__parte` e `bloco--variacao` (ex.: `balao__frase`, `botao--grande`).
+- Cores ficam só nas variáveis de `css/base.css`. Para mudar a paleta, mude ali.
 - Endereços dos arquivos começam com `/` (ex.: `/css/base.css`), por isso o site precisa rodar num servidor.
 
 ## Rotas
@@ -55,45 +66,66 @@ TradutorLibras/
 
 Para criar uma página nova: crie o HTML em `html/`, o CSS em `css/paginas/`,
 o JS em `js/paginas/` (se precisar) e adicione a rota no `vercel.json`.
-O `servidor.py` lê o mesmo arquivo, então funciona igual nos dois lugares.
 
 ## Como testar no seu computador
-
-Dentro da pasta do projeto:
 
 ```bash
 python servidor.py
 ```
 
 O navegador abre em http://localhost:8000. Use Chrome ou Edge.
-Na primeira tradução o avatar pode levar alguns segundos para carregar.
+Se a porta estiver ocupada, o servidor avisa e sugere outra (ex.: `python servidor.py 8001`).
+
+## Testes automáticos
+
+Instale uma vez:
+
+```bash
+pip install -r requirements-testes.txt
+python -m playwright install chromium
+```
+
+Rode sempre que mudar algo:
+
+```bash
+python -m pytest
+```
+
+Os testes usam um VLibras **falso**, então funcionam sem internet. Eles conferem, entre outros:
+
+| Situação | O que o site deve fazer |
+|---|---|
+| Texto vazio, só espaços, só símbolos/emojis | Mostrar erro, tremer o campo, não chamar o avatar |
+| Mais de 500 caracteres | Campo não aceita; contador fica vermelho |
+| HTML digitado (`<img onerror=…>`) | Mostrar como texto, nunca executar |
+| VLibras fora do ar | Erro com botão "Recarregar" |
+| Avatar não abre em 90 s | Erro com botão "Tentar de novo" |
+| Aluno fechou o avatar | Próxima tradução abre de novo |
+| Vários cliques seguidos | Traduz uma vez só |
+| Internet caiu / voltou | Avisa e volta ao normal sozinho |
+| Histórico estragado ou armazenamento bloqueado | Página funciona, recentes ficam vazios |
+| Microfone bloqueado, sem microfone, sem fala | Mensagem clara para cada caso |
+| Navegador sem reconhecimento de voz | Esconde o botão do microfone |
+| Porta inválida/ocupada, `vercel.json` com erro | Mensagem clara no terminal |
+| Celular (360 px) | Nenhuma página com rolagem para o lado |
 
 ## Como publicar no Vercel
 
-**Pelo GitHub (recomendado)**
-1. Crie um repositório no GitHub e envie esta pasta.
+1. Envie as mudanças para o GitHub (`git add .`, `git commit -m "..."`, `git push`).
 2. No Vercel: **Add New → Project**, escolha o repositório.
 3. *Framework Preset*: **Other**. Não precisa de comando de build.
 4. **Deploy**. A cada `git push` o site atualiza sozinho.
 
-**Pela linha de comando**
-```bash
-npm i -g vercel
-vercel          # primeira vez
-vercel --prod   # publicar
-```
-
 ## Como a tradução funciona
 
 1. A página carrega o widget oficial do VLibras.
-2. Ao clicar em **Traduzir**, `js/modulos/vlibras.js` abre o avatar e espera ele carregar.
-3. O texto vai para o quadro "Sendo sinalizado agora" e o script simula um clique nele.
+2. Ao clicar em **Traduzir**, `validacao.js` confere o texto e `vlibras.js` abre o avatar.
+3. O texto vai para o balão de resultado e o script simula um clique nele.
    O VLibras traduz o texto clicado e o avatar faz os sinais.
 
 Detalhes:
 - Botões e links do tradutor têm a classe `vlibras-links`, para o avatar não "traduzir"
-  o botão em vez de executar a ação.
-- Com o avatar aberto, clicar em qualquer texto da página também o traduz.
+  o botão em vez de executar a ação. Ícones dentro deles têm `pointer-events: none`.
 - A tradução depende da internet e dos servidores do VLibras.
 - O VLibras não tem comando oficial para "traduzir este texto"; usamos um comportamento
   interno do widget (versão 7.12.2). Se parar de funcionar, revise `widgetPronto()`.

@@ -5,25 +5,34 @@
    ========================================================== */
 
 .em-breve {
-  max-width: 680px;
-  margin: 24px auto;
+  max-width: 640px;
+  margin: 0 auto;
   text-align: center;
 }
 
 .em-breve__titulo {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .em-breve__texto {
-  margin: 0 auto 20px;
-}
-
-.em-breve__lista {
+  margin: 10px 0 20px;
   color: var(--texto-suave);
-  text-align: left;
 }
 
-.em-breve__botoes {
+/* Lista em formato de "pílulas" */
+.em-breve__lista {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-top: 24px;
+  gap: 10px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.em-breve__lista li {
+  padding: 8px 16px;
+  border-radius: var(--raio-pilula);
+  background: var(--fundo);
+  font-weight: 700;
 }

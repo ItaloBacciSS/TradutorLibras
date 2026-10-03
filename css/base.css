@@ -1,43 +1,42 @@
 /* ==========================================================
    base.css
-   Variáveis de cor e medida, reset e tipografia.
-   Usado por TODAS as páginas. Para mudar a identidade visual
-   do site, comece pelas variáveis em :root.
+   Variáveis de cor e medida, reset, tipografia e acessibilidade.
+   Usado por TODAS as páginas.
+   Para mudar as cores do site inteiro, mude só as variáveis.
    ========================================================== */
 
-/* ---------- Variáveis (tema claro) ---------- */
+/* ---------- Fonte (Google Fonts) ---------- */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap");
+
+/* ---------- Variáveis ---------- */
 :root {
-  --azul: #1351b4;
-  --azul-escuro: #0c326f;
-  --verde: #168821;
-  --amarelo: #ffcd07;
-  --vermelho: #c62828;
+  color-scheme: light;
 
-  --fundo: #f5f7fb;
+  /* Paleta: azul elétrico + ciano + verde-limão */
+  --azul: #2f54eb;
+  --azul-escuro: #1d39c4;
+  --ciano: #13c2c2;
+  --limao: #a0d911;
+  --limao-claro: #d3f261;
+  --rosa: #f759ab;
+  --vermelho: #e8384f;
+
+  --gradiente: linear-gradient(135deg, var(--azul) 0%, var(--ciano) 100%);
+
+  --fundo: #f0f5ff;
   --cartao: #ffffff;
-  --texto: #1b1f29;
-  --texto-suave: #555e6f;
-  --borda: #d6dbe5;
+  --texto: #0b1a3a;
+  --texto-suave: #4a5a7a;
+  --borda: #d6e0f5;
 
-  --raio: 14px;
-  --raio-pequeno: 10px;
-  --sombra: 0 4px 18px rgba(12, 50, 111, 0.08);
-  --largura-maxima: 1080px;
-}
-
-/* ---------- Variáveis (tema escuro) ---------- */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --azul: #5992ed;
-    --azul-escuro: #a9c6f5;
-    --verde: #4fbf5b;
-    --fundo: #12151c;
-    --cartao: #1c212b;
-    --texto: #eef1f6;
-    --texto-suave: #a7b0c0;
-    --borda: #2f3644;
-    --sombra: 0 4px 18px rgba(0, 0, 0, 0.35);
-  }
+  /* Medidas */
+  --raio: 24px;
+  --raio-medio: 16px;
+  --raio-pilula: 999px;
+  --sombra: 0 10px 30px rgba(29, 57, 196, 0.12);
+  --sombra-forte: 0 14px 40px rgba(29, 57, 196, 0.22);
+  --largura-maxima: 920px;
+  --transicao: 0.18s ease;
 }
 
 /* ---------- Reset ---------- */
@@ -51,34 +50,44 @@ html {
 
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  font-size: 17px;
-  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
   color: var(--texto);
   background: var(--fundo);
+}
+
+button {
+  font: inherit;
+}
+
+/* Garante que o atributo "hidden" sempre esconde, mesmo com display definido no CSS */
+[hidden] {
+  display: none !important;
 }
 
 /* ---------- Tipografia ---------- */
 h1,
 h2,
 h3 {
-  line-height: 1.25;
-  color: var(--texto);
+  margin: 0;
+  line-height: 1.15;
+  font-weight: 900;
 }
 
 h1 {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  margin: 0 0 12px;
+  font-size: clamp(2rem, 6vw, 3.2rem);
 }
 
 h2 {
-  font-size: 1.4rem;
-  margin: 0 0 12px;
+  font-size: 1.5rem;
 }
 
 h3 {
-  font-size: 1.1rem;
-  margin: 0 0 8px;
+  font-size: 1.15rem;
 }
 
 a {
@@ -87,8 +96,8 @@ a {
 
 /* ---------- Acessibilidade ---------- */
 :focus-visible {
-  outline: 3px solid var(--amarelo);
-  outline-offset: 2px;
+  outline: 3px solid var(--rosa);
+  outline-offset: 3px;
 }
 
 /* Esconde visualmente, mas leitores de tela continuam lendo */
@@ -109,10 +118,20 @@ a {
   z-index: 100;
   padding: 8px 14px;
   border-radius: 8px;
-  background: var(--amarelo);
-  color: #000;
+  background: var(--limao);
+  color: var(--texto);
 }
 
 .pular:focus {
   left: 8px;
+}
+
+/* Quem prefere menos movimento não vê animações */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

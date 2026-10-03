@@ -16,18 +16,23 @@
 <body>
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-  <!-- ===================== CABEÇALHO ===================== -->
+  <!-- ===================== TOPO ===================== -->
   <header class="topo">
-    <div class="container">
+    <div class="container navegacao">
       <a class="marca" href="/">
-        <span class="marca-icone" aria-hidden="true">L</span>
+        <span class="marca__icone" aria-hidden="true">L</span>
         Tradutor de Libras
       </a>
       <nav class="menu" aria-label="Menu principal">
         <a href="/">Início</a>
-        <a href="/portugues-libras">Português → Libras</a>
-        <a href="/libras-portugues" aria-current="page">Libras → Português</a>
+        <a href="/portugues-libras"><span class="menu__longo">Português → Libras</span><span class="menu__curto">PT → Libras</span></a>
+        <a href="/libras-portugues" aria-current="page"><span class="menu__longo">Libras → Português</span><span class="menu__curto">Libras → PT</span></a>
       </nav>
+    </div>
+
+    <div class="container topo__titulo">
+      <h1>Libras → Português</h1>
+      <p>Estamos construindo esta parte.</p>
     </div>
   </header>
 
@@ -36,23 +41,18 @@
     <div class="container">
       <section class="cartao em-breve">
         <span class="selo selo--dev">Em desenvolvimento</span>
-        <h1 class="em-breve__titulo">Libras → Português</h1>
-        <p class="subtitulo em-breve__texto">
-          Esta parte ainda está sendo construída. A ideia é que você faça os sinais
-          em frente à câmera e o site mostre o texto em português.
+        <h2 class="em-breve__titulo">Em breve: traduzir pela câmera</h2>
+        <p class="em-breve__texto">
+          Você vai fazer os sinais em frente à câmera e o site vai mostrar o texto em português.
         </p>
 
-        <h2>O que vem por aí</h2>
         <ul class="em-breve__lista">
-          <li>Reconhecimento do alfabeto manual (datilologia) pela câmera.</li>
-          <li>Reconhecimento de sinais comuns do dia a dia da escola.</li>
-          <li>Um teclado visual de Libras, para montar frases sem usar a câmera.</li>
+          <li>Alfabeto manual (datilologia)</li>
+          <li>Sinais do dia a dia da escola</li>
+          <li>Teclado visual de Libras, sem câmera</li>
         </ul>
 
-        <div class="botoes em-breve__botoes">
-          <a class="botao" href="/portugues-libras">Usar Português → Libras</a>
-          <a class="botao botao--secundario" href="/">Voltar ao início</a>
-        </div>
+        <a class="botao em-breve__botao" href="/portugues-libras">Enquanto isso, use Português → Libras</a>
       </section>
     </div>
   </main>

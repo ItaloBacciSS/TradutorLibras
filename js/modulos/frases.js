@@ -1,67 +1,56 @@
 /* ==========================================================
    frases.js
-   Frases prontas para praticar.
+   Frases prontas para praticar e o desenho dos "chips".
    Para adicionar um grupo ou uma frase, edite só a lista
    GRUPOS_DE_FRASES. Valide as frases com a comunidade surda.
    ========================================================== */
 
 export const GRUPOS_DE_FRASES = [
   {
+    id: "cumprimentos",
     titulo: "Cumprimentos",
     frases: [
       "Bom dia!",
       "Boa tarde!",
       "Oi, tudo bem?",
       "Qual é o seu nome?",
-      "Meu nome é",
       "Obrigado!",
-      "Desculpa.",
       "Tchau, até amanhã!",
     ],
   },
   {
-    titulo: "Na escola",
+    id: "escola",
+    titulo: "Escola",
     frases: [
-      "Professor, posso ir ao banheiro?",
+      "Posso ir ao banheiro?",
       "Eu não entendi.",
       "Pode repetir, por favor?",
       "Onde fica a biblioteca?",
       "Que horas é o intervalo?",
-      "Vamos fazer o trabalho juntos?",
       "A prova é amanhã.",
     ],
   },
 ];
 
 /**
- * Desenha os grupos de frases dentro de um elemento.
- * @param {HTMLElement} recipiente  onde os grupos serão criados
- * @param {(frase: string) => void} aoEscolher  chamado ao clicar numa frase
+ * Desenha uma lista de frases como chips clicáveis.
+ * @param {HTMLElement} recipiente
+ * @param {string[]} frases
+ * @param {(frase: string) => void} aoEscolher
+ * @param {{ suave?: boolean }} [opcoes]  suave = visual mais discreto
  */
-export function desenharFrases(recipiente, aoEscolher) {
-  recipiente.innerHTML = "";
+export function desenharChips(recipiente, frases, aoEscolher, opcoes = {}) {
+  const chips = document.createElement("div");
+  chips.className = "chips";
 
-  GRUPOS_DE_FRASES.forEach((grupo) => {
-    const bloco = document.createElement("div");
-    bloco.className = "grupo-frases";
-
-    const titulo = document.createElement("h3");
-    titulo.textContent = grupo.titulo;
-    bloco.appendChild(titulo);
-
-    const chips = document.createElement("div");
-    chips.className = "chips";
-
-    grupo.frases.forEach((frase) => {
-      const chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "chip vlibras-links";
-      chip.textContent = frase;
-      chip.addEventListener("click", () => aoEscolher(frase));
-      chips.appendChild(chip);
-    });
-
-    bloco.appendChild(chips);
-    recipiente.appendChild(bloco);
+  frases.forEach((frase) => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip vlibras-links" + (opcoes.suave ? " chip--suave" : "");
+    chip.textContent = frase; // textContent: nunca interpreta HTML
+    chip.addEventListener("click", () => aoEscolher(frase));
+    chips.appendChild(chip);
   });
+
+  recipiente.appendChild(chips);
 }
