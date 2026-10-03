@@ -12,7 +12,7 @@
    (css/paginas/portugues-libras.css).
    ========================================================== */
 
-const MENSAGEM_INICIAL = "Escreva uma frase ou escolha uma das sugestões abaixo.";
+const MENSAGEM_INICIAL = "Escreva uma frase ou escolha uma das frases abaixo.";
 
 /**
  * @param {object} elementos

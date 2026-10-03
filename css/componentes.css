@@ -78,6 +78,16 @@
   font-size: 1.25rem;
 }
 
+.botao--pequeno {
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 0 #7cb305;
+}
+
+.botao--pequeno:hover {
+  box-shadow: 0 6px 0 #7cb305;
+}
+
 .botao--secundario {
   background: #fff;
   color: var(--azul-escuro);

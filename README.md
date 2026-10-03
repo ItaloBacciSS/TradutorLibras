@@ -30,11 +30,15 @@ TradutorLibras/
 │       └── libras-portugues.css
 │
 ├── js/                          JavaScript
+│   ├── dados/                   Só dados (pode editar sem mexer no código)
+│   │   └── sugestoes.js         Regras da "Dica de Libras" (gírias, expressões…)
 │   ├── modulos/                 Peças reutilizáveis, uma responsabilidade cada
 │   │   ├── config.js            Configurações gerais (limites, tempos, chaves)
 │   │   ├── validacao.js         Confere e limpa o texto antes de traduzir
 │   │   ├── vlibras.js           Integração com o avatar do VLibras (+ erros)
 │   │   ├── balao.js             Balão de resultado (inicial/carregando/sinalizando/erro)
+│   │   ├── sugestoes.js         Motor das sugestões: acha e aplica as regras
+│   │   ├── cartao-sugestao.js   Cartão "Dica de Libras" na tela
 │   │   ├── abas.js              Abas acessíveis (funcionam com o teclado)
 │   │   ├── frases.js            Frases prontas para praticar
 │   │   ├── historico.js         Frases recentes (salvas no navegador)
@@ -46,6 +50,7 @@ TradutorLibras/
     ├── conftest.py              Peças comuns: servidor, navegador, VLibras falso
     ├── test_servidor.py         servidor.py: porta, rotas, vercel.json com problema
     ├── test_validacao.py        Regras do texto (vazio, só emojis, longo…)
+    ├── test_sugestoes.py        Regras de sugestão, motor e cartão
     └── test_tradutor.py         A página no navegador, com foco em exceções
 ```
 
@@ -108,6 +113,33 @@ Os testes usam um VLibras **falso**, então funcionam sem internet. Eles confere
 | Navegador sem reconhecimento de voz | Esconde o botão do microfone |
 | Porta inválida/ocupada, `vercel.json` com erro | Mensagem clara no terminal |
 | Celular (360 px) | Nenhuma página com rolagem para o lado |
+
+## Dica de Libras (sugestões)
+
+Enquanto o aluno digita, o site procura trechos que costumam ficar ruins em Libras
+e mostra um cartão com uma sugestão. **Nada é trocado sozinho**: o aluno escolhe
+"Usar sugestão", um dos sentidos da palavra, ou "Manter como está".
+
+As regras ficam em **`js/dados/sugestoes.js`**, divididas em categorias:
+
+| Categoria | Exemplo |
+|---|---|
+| Abreviação | vc → você, pq → porque, kkkk → engraçado |
+| Fala informal | tô → estou, pra → para, cadê → onde está |
+| Gíria | mó → muito, rolê → passeio, trampo → trabalho |
+| Expressão | caiu a ficha → entendi, pagar mico → passar vergonha |
+| Mais natural em Libras | que dia é → quando é, a gente → nós |
+| Palavra com mais de um sentido | manga → fruta / da camisa (o aluno escolhe) |
+
+**Todas as regras começaram com `validado: false`.** Conforme você revisar com a
+comunidade surda, corrija o que precisar e mude para `validado: true`.
+
+Para editar:
+1. Abra `js/dados/sugestoes.js` (o começo do arquivo explica o formato).
+2. Adicione, apague ou corrija regras.
+3. Rode `python -m pytest testes/test_sugestoes.py`. O teste `test_regras_sem_problemas`
+   avisa se alguma regra ficou mal escrita (termo repetido, opção faltando…).
+   O mesmo aviso aparece no console do navegador (F12).
 
 ## Como publicar no Vercel
 

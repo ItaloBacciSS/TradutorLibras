@@ -20,6 +20,8 @@ import { GRUPOS_DE_FRASES, desenharChips } from "../modulos/frases.js";
 import { criarAbas } from "../modulos/abas.js";
 import { criarBalao } from "../modulos/balao.js";
 import { configurarVoz } from "../modulos/voz.js";
+import { encontrarSugestoes, conferirRegras } from "../modulos/sugestoes.js";
+import { criarCartaoSugestao } from "../modulos/cartao-sugestao.js";
 
 // ==========================================================
 // Elementos da página
@@ -43,6 +45,20 @@ const balao = criarBalao({
   textoBotao: document.getElementById("btn-acao-balao-texto"),
 });
 
+const cartaoSugestao = criarCartaoSugestao({
+  elemento: document.getElementById("sugestao"),
+  aoAplicar: (novoTexto) => {
+    tela.texto.value = novoTexto;
+    aoMudarTexto();
+    atualizarSugestoes();
+    tela.texto.focus();
+  },
+  aoManter: (sugestao) => {
+    sugestoesMantidas.add(sugestao.chave);
+    atualizarSugestoes();
+  },
+});
+
 const ROTULO_TRADUZIR = tela.btnTraduzir.firstChild.textContent.trim();
 
 // ==========================================================
@@ -50,6 +66,9 @@ const ROTULO_TRADUZIR = tela.btnTraduzir.firstChild.textContent.trim();
 // ==========================================================
 let traduzindo = false;
 let abas;
+let esperaSugestoes;
+/** Sugestões que o aluno mandou "manter como está" (valem até recarregar a página). */
+const sugestoesMantidas = new Set();
 
 // ==========================================================
 // Tradução
@@ -106,7 +125,23 @@ function definirTraduzindo(ativo) {
 function usarFrase(frase) {
   tela.texto.value = frase;
   aoMudarTexto();
+  atualizarSugestoes();
   traduzir(frase);
+}
+
+// ==========================================================
+// Sugestões ("Dica de Libras")
+// ==========================================================
+function atualizarSugestoes() {
+  clearTimeout(esperaSugestoes);
+  const texto = tela.texto.value;
+  cartaoSugestao.mostrar(encontrarSugestoes(texto, { ignoradas: sugestoesMantidas }), texto);
+}
+
+/** Espera o aluno parar de digitar um instante antes de sugerir. */
+function agendarSugestoes() {
+  clearTimeout(esperaSugestoes);
+  esperaSugestoes = setTimeout(atualizarSugestoes, 400);
 }
 
 // ==========================================================
@@ -126,7 +161,10 @@ function marcarErroNoCampo() {
   tela.campo.classList.add("campo--erro");
 }
 
-tela.texto.addEventListener("input", aoMudarTexto);
+tela.texto.addEventListener("input", () => {
+  aoMudarTexto();
+  agendarSugestoes();
+});
 
 // Enter traduz. Shift + Enter pula linha.
 tela.texto.addEventListener("keydown", (evento) => {
@@ -141,6 +179,7 @@ tela.btnTraduzir.addEventListener("click", () => traduzir());
 tela.btnLimpar.addEventListener("click", () => {
   tela.texto.value = "";
   aoMudarTexto();
+  cartaoSugestao.esconder();
   if (balao.estado() === "erro") balao.inicial();
   tela.texto.focus();
 });
@@ -190,7 +229,10 @@ abas = criarAbas(tela.abas, tela.painelFrases, [
 configurarVoz({
   botao: tela.btnFalar,
   campo: tela.texto,
-  aoMudarTexto,
+  aoMudarTexto: () => {
+    aoMudarTexto();
+    agendarSugestoes();
+  },
   aoErro: (mensagem) => balao.erro(mensagem),
   aoTerminar: () => {
     if (balao.estado() !== "erro" && tela.texto.value.trim()) tela.btnTraduzir.focus();
@@ -213,6 +255,12 @@ window.addEventListener("online", () => {
 // ==========================================================
 aoMudarTexto();
 balao.inicial();
+
+// Avisa no console (F12) se alguma regra de js/dados/sugestoes.js estiver mal escrita
+const problemasNasRegras = conferirRegras();
+if (problemasNasRegras.length) {
+  console.warn("Problemas em js/dados/sugestoes.js:\n- " + problemasNasRegras.join("\n- "));
+}
 
 if (!vlibrasDisponivel() || !iniciarVLibras()) {
   balao.erro(MENSAGENS_VLIBRAS.naoCarregou, { rotulo: "Recarregar", acao: () => location.reload() });

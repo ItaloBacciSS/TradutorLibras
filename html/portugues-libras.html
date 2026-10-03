@@ -68,6 +68,9 @@
           </div>
         </div>
 
+        <!-- Dica de Libras: aparece quando a frase tem algo a melhorar (js/modulos/cartao-sugestao.js) -->
+        <div id="sugestao" class="sugestao" aria-live="polite" hidden></div>
+
         <!-- Botão principal -->
         <button type="button" id="btn-traduzir" class="botao botao--grande botao-traduzir vlibras-links">
           Traduzir em Libras
@@ -85,7 +88,7 @@
           <span class="spinner" aria-hidden="true"></span>
 
           <div class="balao__corpo">
-            <p id="balao-mensagem" class="balao__mensagem">Escreva uma frase ou escolha uma das sugestões abaixo.</p>
+            <p id="balao-mensagem" class="balao__mensagem">Escreva uma frase ou escolha uma das frases abaixo.</p>
             <!-- O VLibras traduz o texto deste elemento quando ele recebe o clique simulado -->
             <p id="alvo-libras" class="balao__frase"></p>
           </div>

@@ -86,6 +86,105 @@
 }
 
 /* ==========================================================
+   1b. Cartão "Dica de Libras" (sugestões)
+   ========================================================== */
+.sugestao {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border: 2px solid #ffe58f;
+  border-radius: var(--raio-medio);
+  background: #fffbe6;
+  animation: aparecer 0.25s ease;
+}
+
+.sugestao[data-tipo="escolha"] {
+  border-color: #87e8de;
+  background: #e6fffb;
+}
+
+.sugestao__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.sugestao__titulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #874d00;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sugestao[data-tipo="escolha"] .sugestao__titulo {
+  color: #006d75;
+}
+
+.sugestao__contador {
+  padding: 2px 10px;
+  border-radius: var(--raio-pilula);
+  background: rgba(0, 0, 0, 0.06);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.sugestao__linha {
+  margin: 0;
+  font-weight: 700;
+}
+
+.sugestao__antes {
+  color: var(--vermelho);
+  text-decoration-thickness: 2px;
+}
+
+.sugestao__depois {
+  color: #237804;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.sugestao__previa {
+  margin: 4px 0 0;
+  color: var(--texto-suave);
+  font-style: italic;
+  word-break: break-word;
+}
+
+.sugestao__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.chip--opcao {
+  border-color: #5cdbd3;
+}
+
+.sugestao__porque {
+  margin-top: 10px;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
+
+.sugestao__porque summary {
+  width: fit-content;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sugestao__porque p {
+  margin: 6px 0 0;
+}
+
+/* ==========================================================
    2. Balão de resultado (muda conforme o estado)
    data-estado = "inicial" | "carregando" | "sinalizando" | "erro"
    ========================================================== */
